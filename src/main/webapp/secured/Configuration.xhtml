@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				template="./../template/DefaultLayout.xhtml"
+				xmlns:pe="http://primefaces.org/ui/extensions">
+				
+	<ui:define name="contenido" >
+        	
+   		<h:form id="id_form" >
+     		<p:growl id="id_growl"  life="2000" />
+     	
+	 		<p:tabView id="id_tab" dynamic="true" cache="true">
+				<p:tab   title="Preferencias de usuario">
+					<div class="ui-g-12">
+						<h:panelGrid columns="6" cellpadding="10">
+	      					<p:outputLabel for="id_name" value="Nombre del usuario: *" /> 
+							<p:inputText id="id_name" styleClass="inputTextConfigurationPF" value="#{loginManagedBean.user.name}"   >
+								<p:ajax/>
+							</p:inputText>
+								
+							<p:outputLabel for="id_last_name" value="Apellidos del usuario: *" /> 
+							<p:inputText id="id_last_name" styleClass="inputTextConfigurationPF" value="#{loginManagedBean.user.lastName}" >
+								<p:ajax/>
+							</p:inputText>
+							
+							<p:column colspan="1"/>
+							<p:column colspan="1"/>
+							
+							<p:outputLabel for="id_nick" value="Nick de acceso: *" /> 
+							<p:inputText id="id_nick" styleClass="inputTextConfigurationPF" value="#{loginManagedBean.user.nick}" >
+								<p:ajax/>
+							</p:inputText>
+	
+	  						<h:outputLabel for="id_password" value="Contraseña de acceso:*" />
+	  						<p:inputText id="id_password" styleClass="inputTextConfigurationPF" value="#{loginManagedBean.user.password}">
+	  							<p:ajax/>
+	  						</p:inputText>
+	
+					        <p:outputLabel for="id_theme" value="Tema de la aplicación:" /> 
+					       	<p:themeSwitcher id="id_theme" styleClass="inputTextConfigurationPF" value="#{loginManagedBean.user.theme}" style="width:165px" effect="fold" required="true">
+					             <f:selectItems value="#{loginManagedBean.themes}" var="theme" itemLabel="#{loginManagedBean.themes.get(theme)}" itemValue="#{theme}" />
+					             <p:ajax/>
+					        </p:themeSwitcher>
+					        
+					       	
+						   	<h:outputLabel for="id_ip" value="Dirección IP del servidor: " />
+							<p:inputText id="id_ip" styleClass="inputTextConfigurationPF" value="#{loginManagedBean.getIP()}" disabled="true"/>
+					  	</h:panelGrid>
+					  	
+					</div>
+					
+					<div class="ui-g-12" align="right" style="margin-top:10px;">
+						<p:commandButton value="Actualizar cambios" action="#{loginManagedBean.save()}" icon="ui-icon-disk" update=":id_form:id_growl" onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"/>
+					</div>
+	
+   				</p:tab>
+   			</p:tabView>
+   			
+   			 <pe:blockUI widgetVar="blockUIWidget">  
+			    <h:panelGrid columns="2">  
+			        <h:graphicImage  value="./../resources/image/ui_icon/load.gif"  />  
+			        <h:outputText value="Actualizando cambios..." style="white-space: nowrap;"/>  
+			    </h:panelGrid>  
+			</pe:blockUI>
+		</h:form>
+
+	</ui:define>
+</ui:composition>

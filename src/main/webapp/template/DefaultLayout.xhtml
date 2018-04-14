@@ -1,0 +1,140 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link href="../resources/css/template.css" rel="stylesheet" type="text/css" />
+	<link href="../resources/css/prime_faces.css" rel="stylesheet" type="text/css" />
+	<link href="../resources/css/image.css" rel="stylesheet" type="text/css" />
+	<script src="http://maps.google.com/maps/api/js?key=AIzaSyC1KuT3p8bAQUdRrRcTFt7ltPCYiyeSEC0" type="text/javascript" />
+	<link rel="shortcut icon" href="./../resources/image/ui_icon/uex.ico" />
+	<title>Monitor Android</title>
+</h:head>
+
+
+<h:body>
+<script type="text/javascript">
+  //<![CDATA[
+  function logout(xhr, status, args) {
+    setTimeout(function() {
+      window.location = './../Login.xhtml';
+    }, 500);
+  }
+//]]>
+</script>
+	<!-- CABECERA -->
+	<div class="header">
+		<h:form id="id_form_cabecera">
+			<p:growl id="messages" showDetail="true" />
+			<p:sticky target="id_toolbar" />
+			<p:toolbar id="id_toolbar" styleClass="headerPF">
+				<f:facet name="left">
+					<p:button type="button" value="Dispositivos" outcome="device" icon=" ui-icon-grip-diagonal-se" />
+
+					<span class="ui-separator"> <span
+						class="ui-icon ui-icon-grip-dotted-vertical" />
+					</span>
+
+					<p:commandButton type="button" title="Imprimir" icon="fa fa-print">
+		                <p:printer target="id_panel_article" />
+					</p:commandButton>
+
+				</f:facet>
+
+				<f:facet name="right">
+					<p:outputLabel rendered="#{videoManagedBean.record}" value="Grabando video... "/>
+					<p:graphicImage rendered="#{videoManagedBean.record}" value="./../resources/image/ui_icon/rec.gif" width="20" height="20" />
+					<p:outputLabel rendered="#{audioManagedBean.record}" value="Grabando audio... "/>
+					<p:graphicImage rendered="#{audioManagedBean.record}" value="./../resources/image/ui_icon/rec.gif" width="20" height="20" />
+					<p:spacer width="50" height="4" />
+					
+				
+				    <p:poll interval="5"  update=":id_form_cabecera" />
+					<p:button  id="id_ip_device" type="button" rendered="#{deviceManagedBean.deviceSelected.imei != null}" value="#{deviceManagedBean.deviceSelected.imei}:#{deviceManagedBean.deviceSelected.ip}" outcome="device" icon="fa fa-android" disabled="true" />
+
+				   <!--   <p:poll interval="5"  update="id_menu_toolbar" />-->
+					<p:menuButton id="id_menu_toolbar" value="#{loginManagedBean.nick}">
+						<p:menuitem value="Configuración" update="messages" icon="ui-icon-gear" outcome="configuration" />
+						<p:menuitem value="Cerrar sesión" actionListener="#{loginManagedBean.doLogout()}" oncomplete="logout(xhr, status, args)"  update="messages"  icon="ui-icon-power" />
+					</p:menuButton>
+				</f:facet>
+
+			</p:toolbar>
+		</h:form>
+	</div>
+
+	<!-- MENU -->
+	<div class="menu">
+		<p:panel id="id_menu" header="Menú" styleClass="menuPF">
+			<h:form>
+				<p:menu toggleable="true" style="width:100%;">
+
+					<p:submenu label="Actividad diaria">
+						<p:menuitem value="Calendario" outcome="calendar" icon="ui-icon-script" />
+					</p:submenu>
+					
+					<p:submenu label="Baliza">
+						<p:menuitem value="Mapa" outcome="beacon" icon="ui-icon-search" />
+					</p:submenu>
+					
+					<p:submenu label="Contactos">
+						<p:menuitem value="Historial" outcome="contact" icon="ui-icon-contact" />
+					</p:submenu>
+
+					<p:submenu label="Llamadas">
+						<p:menuitem value="Análisis" outcome="call_analysis" icon="ui-icon-copy" />
+						<p:menuitem value="Historial" outcome="call" icon="ui-icon-transferthick-e-w" />
+						<p:menuitem value="Timeline" outcome="call_time_line" icon=" ui-icon-calendar" />
+					</p:submenu>
+
+					<p:submenu label="Multimedia">
+						<p:menuitem value="Audio" outcome="audio" icon="ui-icon-volume-on" />
+						<p:menuitem value="Imagen" outcome="image" icon="ui-icon-image" />
+						<p:menuitem value="Video" outcome="video" icon="ui-icon-video" />
+					</p:submenu>
+
+					<p:submenu label="SMS">
+						<p:menuitem value="Análisis" outcome="sms_analysis" icon="ui-icon-copy" />
+						<p:menuitem value="Historial" outcome="sms" icon="ui-icon-mail-open" />
+						<p:menuitem value="Timeline" outcome="sms_time_line" icon=" ui-icon-calendar" />
+					</p:submenu>
+					<p:submenu label="Memoria externa">
+						<p:menuitem value="Recursos" outcome="resource" icon="ui-icon-folder-open" />
+					</p:submenu>
+
+					<p:submenu label="Navegador web">
+						<p:menuitem value="Historial" outcome="browser" icon="ui-icon-script" />
+					</p:submenu>
+				</p:menu>
+			</h:form>
+		</p:panel>
+
+	</div>
+
+	<div class="article">
+		<p:panel id="id_panel_article" styleClass="articlePF" header="Panel">
+			<ui:insert name="contenido"/>
+		</p:panel>
+	</div>
+
+	<div class="footer" >
+		<div id="id_text_footer">
+			<div class="ui-g">
+    			<div id="id_text_footer_type1" class="ui-g-12">Lucio David Fondón Terrón</div>
+    			<div id="id_text_footer_type2" class="ui-g-12">--Trabajo Fin de Grado--</div>
+			</div>
+			<div class="ui-g">
+				<p:separator id="id_text_footer_type2" styleClass="separator" />
+    			<div class="ui-g-12"> Copyright © 2016 Universidad de Extremadura</div>
+			</div>
+		</div>
+	</div>
+
+
+</h:body>
+</html>

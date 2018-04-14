@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				template="../template/DefaultLayout.xhtml"
+				xmlns:pe="http://primefaces.org/ui/extensions"
+				>
+
+
+	<ui:define name="contenido" >
+		<script type="text/javascript">
+		    PrimeFaces.locales['tr'] = {
+		        closeText: 'kapat',
+		        prevText: 'Anterior',
+		        nextText: 'Siguiente',
+		        currentText: 'Hoy',
+		        monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+		            'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+		        monthNamesShort: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+		      		            'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+		        dayNames: ['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'],
+		        dayNamesShort: ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'],
+		        dayNamesMin: ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'],
+		        weekHeader: 'Hf',
+		        firstDay: 1,
+		        isRTL: false,
+		        showMonthAfterYear: false,
+		        yearSuffix: '',
+		        month: 'Mes',
+		        week: 'Semana',
+		        day: 'Dia',
+		        allDayText : 'Tüm Gün'
+		    };
+		</script>
+		<h:form id="id_form" >
+			<p:growl id="id_growl"  life="2000" />
+		    <p:tabView id="id_tab" dynamic="true" cache="true">
+				<p:tab   title="Calendario de eventos">
+					<p:scrollPanel  mode="native" style="height:800px; border:0px;" >
+		        		<p:schedule id="schedule" value="#{calendarManagedBean.schedule}" locale="tr" widgetVar="schedule"  timeZone="GMT+2"  />
+            			
+        			</p:scrollPanel>
+						
+        		</p:tab>
+        	</p:tabView>
+        	
+        
+    
+		</h:form>
+		
+	</ui:define>
+</ui:composition>

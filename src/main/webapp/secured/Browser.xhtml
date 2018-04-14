@@ -1,0 +1,114 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				template="../template/DefaultLayout.xhtml"
+				xmlns:pe="http://primefaces.org/ui/extensions"
+				xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+				>
+
+	<ui:define name="contenido" >
+		<h:form id="id_form" >
+		 	<p:growl id="id_growl" showDetail="true"  life="4000" />
+       			<p:tabView id="id_tab" dynamic="true" cache="true">
+					<p:tab   title="Historial web">
+ 
+						<div class="ui-g-12">
+							<p:fieldset   rendered="#{browserManagedBean.disabled}" toggleable="true"  legend="Notificación" style="margin-bottom:20px">
+						        <h:panelGrid columns="2" cellpadding="5">
+						            <p:graphicImage  value="./../resources/image/ui_icon/warning.png" height="50" />
+						            <h:outputText value="#{browserManagedBean.emptyMessage}" />
+						        </h:panelGrid>
+						    </p:fieldset>
+						    
+							<p:idleMonitor timeout="5000">
+								<p:ajax event="idle" update=":id_form:id_tab:id_browser_table,:id_form:id_tab:id_delete" />
+							</p:idleMonitor>		
+							<p:dataTable id="id_browser_table" var="browser" value="#{browserManagedBean.listBrowser}"
+								paginatorTemplate="{RowsPerPageDropdown} {CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} "
+								paginator="true" rows="15" rowsPerPageTemplate="10, 15, 18" styleClass="dataTablePF"   style="font-size:80%;" emptyMessage="#{browserManagedBean.emptyMessage}" 
+								filteredValue="#{browserManagedBean.listFilteredBrowser}">
+								
+								<f:facet name="header">
+									Listado del historial web del dispositivo seleccionado
+									<p:commandButton id="id_toggler" type="button" value="Columnas" style="float:right; height:30px;" icon="ui-icon-calculator" />
+        							<p:columnToggler datasource="id_browser_table" trigger="id_toggler" />     
+								</f:facet>
+			
+								<p:column headerText="ID" width="20">
+									<h:outputText value="#{browser.id}" />
+								</p:column>
+			
+								<p:column headerText="Título" width="100%" filterBy="#{browser.title}" filterMatchMode="contains" >
+									<h:outputText value="#{browser.title}" />
+								</p:column>
+							
+								<p:column headerText="Fecha" width="120">
+									<h:outputText value="#{browser.dateAndroid}" >
+										<f:convertDateTime pattern="MM/dd/yyyy hh:mm a" />
+									</h:outputText>
+								</p:column>
+							
+								<p:column headerText="Web" width="30">
+									<p:lightBox iframe="true" id="lighbox3" width="1200" height="800">
+									    <h:outputLink value="#{browser.url}" title="#{browser.dateAndroid}">
+											<h:commandButton value="Ver" />
+									    </h:outputLink>
+									</p:lightBox>		            					
+								</p:column>
+							
+								<p:column headerText="Tipo" width="40">
+									<h:graphicImage  value="./../resources/image/ui_icon/browser_#{browser.typeBrowser}.png" width="40" height="30" />
+								</p:column>
+								
+								<f:facet name="footer">
+        							Registros totales: #{fn:length(browserManagedBean.listBrowser)}
+   						 		</f:facet>
+							</p:dataTable>
+						</div>		
+									
+						<div class="ui-g-12" align="right" style="margin-top:10px;">
+						
+				       		<p:commandButton value="Sincronizar" styleClass="buttonPF" action="#{browserManagedBean.synchronizeLogBrowser()}" onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()" update=":id_form:id_growl,:id_form:id_tab:id_browser_table,:id_form:id_tab:id_delete,:id_form:id_tab:id_menu_exportar" icon="fa fa-refresh" disabled="#{browserManagedBean.disabled || browserManagedBean.disabledDevice}"/> 
+				       		<p:commandButton id="id_delete" value="Eliminar historial" action="#{browserManagedBean.deleteAllBrowser()}" icon="ui-icon-cancel" disabled="#{browserManagedBean.listBrowser.size() == 0 || browserManagedBean.disabled}" styleClass="buttonPF"  update=":id_form:id_growl,:id_form:id_tab:id_browser_table,:id_form:id_tab:id_delete,:id_form:id_tab:id_menu_exportar" onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"/> 	
+				       		<p:commandButton id="id_menu_exportar" styleClass="buttonPF" value="Exportar" type="button" icon="fa fa-download" ajax="false" disabled="#{browserManagedBean.listBrowser.size() == 0 || browserManagedBean.disabled}" />
+				    		<p:menu overlay="true" trigger="id_menu_exportar" my="left top" at="left bottom" style="font-size:60%">
+					            <p:menuitem value="PDF" ajax="false">
+					            	<p:dataExporter type="pdf" target="id_browser_table" fileName="HistorialWeb" />
+					            </p:menuitem>
+					            <p:menuitem value="XML" ajax="false" >
+					            	<p:dataExporter type="xml" target="id_browser_table" fileName="HistorialWeb" />
+					            </p:menuitem>
+					            <p:menuitem value="CSV"   ajax="false">
+					            	<p:dataExporter type="csv" target="id_browser_table" fileName="HistorialWeb" />
+					            </p:menuitem>
+						    </p:menu>
+						    <p:commandButton id="id_legend" styleClass="buttonPF" value="Leyenda" type="button" />
+						    <p:overlayPanel id="id_overlay_panel" for="id_legend" hideEffect="fade" showEvent="mouseover">
+						    	<h:panelGrid columns="2" >
+						    		<p:outputLabel for="id_history" value="Historial: " />
+						    		<h:graphicImage id="id_history" value="./../resources/image/ui_icon/browser_HISTORY.png" width="40" height="30" />
+						    		<p:outputLabel for="id_bookmark" value="Marcador: " />
+						    		<h:graphicImage id="id_bookmark" value="./../resources/image/ui_icon/browser_BOOKMARK.png" width="40" height="30" />
+						    	  	<p:outputLabel for="id_error" value="Erróneo: " />
+						    		<h:graphicImage id="id_error" value="./../resources/image/ui_icon/browser_ERROR.png" width="40" height="30" />
+						    	</h:panelGrid>
+						    </p:overlayPanel>		
+				    	</div>
+									
+					</p:tab>
+				</p:tabView>
+							
+        		    
+	    	<pe:blockUI widgetVar="blockUIWidget">  
+			    <h:panelGrid columns="2">  
+			        <h:graphicImage  value="./../resources/image/ui_icon/load.gif" height="150" />  
+			        <h:outputText value="Sincronizando historial web..." style="white-space: nowrap;"/>  
+			    </h:panelGrid>  
+			</pe:blockUI>
+		</h:form>
+	</ui:define>
+</ui:composition>

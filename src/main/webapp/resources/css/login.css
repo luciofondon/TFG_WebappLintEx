@@ -1,0 +1,43 @@
+/* 
+    Document   : 	estilo
+    Created on : 	29-ago-2013, 20:49:29
+    Author     : 	Lucio David Fondon Terron
+    Description:	Hoja de estilos para la plantilla por defecto.
+*/
+
+/*************************************************************************************************/
+.left {
+	position: absolute;
+	/*overflow: hidden;*/
+	/*padding: 20px;*/
+	left: 0%; /*Colocacion con respecto a la izquierda*/
+	width: 70%; /*Ancho div*/
+	height: 100%; /*Alto*/
+}
+
+.right {
+	position: absolute;
+	/*overflow: hidden;*/
+	/*padding: 20px;*/
+	left: 70%;
+	/*Colocacion con respecto a la izquierda*/
+	width: 30%; /*Ancho div*/
+	height: 100%;
+}
+
+form {
+	position: absolute;
+	top: 50%;
+	height: 30%;
+	width: 100%;
+}
+
+body {
+	background-image: url(./../image/background/fondo_login.png);
+}
+
+.logoUnex {
+	height: 60%;
+	margin-left: 30%;
+	margin-top: 15%;
+}

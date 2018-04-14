@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PROCESS model-entity="JSFProcess">
+ <PROCESS-ITEM NAME="rules:#secured#Contact.xhtml"
+  PATH="/secured/Contact.xhtml" SHAPE="304,721,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#secured#Browser.xhtml"
+  PATH="/secured/Browser.xhtml" SHAPE="304,721,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#secured#Sms.xhtml" PATH="/secured/Sms.xhtml"
+  SHAPE="304,721,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#secured#Call.xhtml"
+  PATH="/secured/Call.xhtml" SHAPE="304,721,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#secured#Image.xhtml"
+  PATH="/secured/Image.xhtml" SHAPE="304,721,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#secured#Audio.xhtml"
+  PATH="/secured/Audio.xhtml" SHAPE="304,721,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#secured#Beacon.xhtml"
+  PATH="/secured/Beacon.xhtml" SHAPE="304,721,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#secured#Device.xhtml"
+  PATH="/secured/Device.xhtml" SHAPE="304,721,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#secured#DeviceDetail.xhtml"
+  PATH="/secured/DeviceDetail.xhtml" SHAPE="304,657,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#secured#DeviceDetail.xhtml:0" NAME="item"
+   PATH="/secured/DeviceDetail.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="back::#secured#Device.xhtml" NAME="output"
+    PATH="/secured/Device.xhtml" TARGET="rules:#secured#Device.xhtml"
+    TITLE="back" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#Login.xhtml" PATH="/Login.xhtml"
+  SHAPE="304,657,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#Login.xhtml:0" NAME="item"
+   PATH="/Login.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="login::#secured#Device.xhtml" NAME="output"
+    PATH="/secured/Device.xhtml" TARGET="rules:#secured#Device.xhtml"
+    TITLE="login" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:*" PATH="*" SHAPE="32,17,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:*:0" NAME="item" PATH="*" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="audio::#secured#Audio.xhtml" NAME="output4"
+    PATH="/secured/Audio.xhtml" TARGET="rules:#secured#Audio.xhtml"
+    TITLE="audio" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="beacon::#secured#Beacon.xhtml"
+    NAME="output8" PATH="/secured/Beacon.xhtml"
+    TARGET="rules:#secured#Beacon.xhtml" TITLE="beacon" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="browser::#secured#Browser.xhtml"
+    NAME="output15" PATH="/secured/Browser.xhtml"
+    TARGET="rules:#secured#Browser.xhtml" TITLE="browser" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="calendar::#secured#Calendar.xhtml"
+    NAME="output6" PATH="/secured/Calendar.xhtml"
+    TARGET="rules:#secured#Calendar.xhtml" TITLE="calendar" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="call::#secured#Call.xhtml" NAME="output1"
+    PATH="/secured/Call.xhtml" TARGET="rules:#secured#Call.xhtml"
+    TITLE="call" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="call_analysis::#secured#CallAnalysis.xhtml"
+    NAME="output12" PATH="/secured/CallAnalysis.xhtml"
+    TARGET="rules:#secured#CallAnalysis.xhtml" TITLE="call_analysis" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="call_time_line::#secured#CallTimeLine.xhtml"
+    NAME="output11" PATH="/secured/CallTimeLine.xhtml"
+    TARGET="rules:#secured#CallTimeLine.xhtml" TITLE="call_time_line" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="configuration::#secured#Configuration.xhtml"
+    NAME="output14" PATH="/secured/Configuration.xhtml"
+    TARGET="rules:#secured#Configuration.xhtml" TITLE="configuration" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="contact::#secured#Contact.xhtml"
+    NAME="output9" PATH="/secured/Contact.xhtml"
+    TARGET="rules:#secured#Contact.xhtml" TITLE="contact" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="image::#secured#Image.xhtml" NAME="output2"
+    PATH="/secured/Image.xhtml" TARGET="rules:#secured#Image.xhtml"
+    TITLE="image" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="resource::#secured#Resource.xhtml"
+    NAME="output7" PATH="/secured/Resource.xhtml"
+    TARGET="rules:#secured#Resource.xhtml" TITLE="resource" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="sms::#secured#Sms.xhtml" NAME="output5"
+    PATH="/secured/Sms.xhtml" TARGET="rules:#secured#Sms.xhtml"
+    TITLE="sms" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="sms_analysis::#secured#SmsAnalysis.xhtml"
+    NAME="output18" PATH="/secured/SmsAnalysis.xhtml"
+    TARGET="rules:#secured#SmsAnalysis.xhtml" TITLE="sms_analysis" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="sms_time_line::#secured#SmsTimeLine.xhtml"
+    NAME="output" PATH="/secured/SmsTimeLine.xhtml"
+    TARGET="rules:#secured#SmsTimeLine.xhtml" TITLE="sms_time_line" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="video::#secured#Video.xhtml" NAME="output3"
+    PATH="/secured/Video.xhtml" TARGET="rules:#secured#Video.xhtml"
+    TITLE="video" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="device::#secured#Device.xhtml"
+    NAME="output10" PATH="/secured/Device.xhtml"
+    TARGET="rules:#secured#Device.xhtml" TITLE="device" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="logout::#Login.xhtml" NAME="output13"
+    PATH="/Login.xhtml" TARGET="rules:#Login.xhtml" TITLE="logout" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="device_detail::#secured#DeviceDetail.xhtml"
+    NAME="output16" PATH="/secured/DeviceDetail.xhtml"
+    TARGET="rules:#secured#DeviceDetail.xhtml" TITLE="device_detail" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="app::#secured#DeviceDetail.xhtml"
+    NAME="output17" PATH="/secured/DeviceDetail.xhtml"
+    TARGET="rules:#secured#DeviceDetail.xhtml" TITLE="app" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="browser_analysis::#secured#BrowserAnalysis.xhtml"
+    NAME="output19" PATH="/secured/BrowserAnalysis.xhtml"
+    TARGET="rules:#secured#BrowserAnalysis.xhtml"
+    TITLE="browser_analysis" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#secured#Resource.xhtml"
+  PATH="/secured/Resource.xhtml" SHAPE="304,657,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#secured#CallTimeLine.xhtml"
+  PATH="/secured/CallTimeLine.xhtml" SHAPE="304,657,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#secured#Video.xhtml"
+  PATH="/secured/Video.xhtml" SHAPE="304,657,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#secured#Configuration.xhtml"
+  PATH="/secured/Configuration.xhtml" SHAPE="304,657,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#secured#CallAnalysis.xhtml"
+  PATH="/secured/CallAnalysis.xhtml" SHAPE="304,657,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#secured#Calendar.xhtml"
+  PATH="/secured/Calendar.xhtml" SHAPE="304,657,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#secured#SmsAnalysis.xhtml"
+  PATH="/secured/SmsAnalysis.xhtml" SHAPE="304,689,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#secured#BrowserAnalysis.xhtml"
+  PATH="/secured/BrowserAnalysis.xhtml" SHAPE="304,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#secured#SmsTimeLine.xhtml"
+  PATH="/secured/SmsTimeLine.xhtml" SHAPE="304,721,0,0" model-entity="JSFProcessGroup"/>
+</PROCESS>

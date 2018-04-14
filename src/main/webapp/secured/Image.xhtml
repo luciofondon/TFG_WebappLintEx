@@ -1,0 +1,194 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				template="../template/DefaultLayout.xhtml"
+				xmlns:pe="http://primefaces.org/ui/extensions"
+				>
+
+	
+	<ui:define name="contenido">
+		<h:form id="id_form">           
+			<p:growl id="id_growl"  life="2000" showDetail="true"/>
+		    <p:tabView id="id_tab" dynamic="true" cache="true">
+		    	 
+		    	<!-- PESTANIA DE CAMARA -->
+		   		<p:tab   title="Cámara">
+			   			<div class="ui-g">
+			   			  	<h:panelGrid columns="6" cellpadding="10">
+			   			  	
+			   			  		<p:outputLabel for="id_tipo_camara" value="Tipo cámara:" />
+				        		<p:selectOneButton id="id_tipo_camara" value="#{imageManagedBean.camera}" disabled="#{imageManagedBean.disabled}" >
+							    	<f:selectItem itemLabel="Principal" itemValue="0" />
+							       	<f:selectItem itemLabel="Secundaria" itemValue="1" />
+							       	<p:ajax event="change" listener="#{imageManagedBean.selectCamera()}" update=":id_form:id_growl, :id_form:id_tab:id_flash"/>
+							    </p:selectOneButton>
+							    
+			   			  		<p:outputLabel for="id_save" value="Guardar imagen en el dispositivo:" />
+								<p:selectBooleanButton id="id_save" value="#{imageManagedBean.save}" onLabel="Sí" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" style="width:60px" disabled="#{imageManagedBean.disabled}" >
+									<p:ajax update=":id_form:id_growl" listener="#{imageManagedBean.selectSave()}" />
+								</p:selectBooleanButton>
+									        
+						    	<p:outputLabel for="id_flash" value="Modo del flash:" />
+						        <p:selectOneMenu id="id_flash" value="#{imageManagedBean.flash}" effect="fold" style="margin-right:5px;" disabled="#{imageManagedBean.camera==1 || imageManagedBean.disabled}">
+						       		<p:ajax event="change" listener="#{imageManagedBean.selectFlash()}" update=":id_form:id_growl"/>
+						            <f:selectItem itemLabel="Apagado" itemValue="0" />
+						            <f:selectItem itemLabel="Encendido" itemValue="1" />
+						            <f:selectItem itemLabel="Automático" itemValue="2" />
+						           	<f:selectItem itemLabel="Reducción de ojos rojos" itemValue="3" />
+						            <f:selectItem itemLabel="Emisión constante de luz" itemValue="4" />
+						        </p:selectOneMenu>
+							    
+			   			  	</h:panelGrid>
+			   			</div>
+			   			<div class="ui-g">
+			   				<p:scrollPanel  mode="native" styleClass="scrollPanelPF" >
+				   				<p:fieldset   rendered="#{imageManagedBean.disabled}" toggleable="true"  legend="Notificación" style="margin-bottom:20px">
+							        <h:panelGrid columns="2" cellpadding="5">
+							            <p:graphicImage  value="./../resources/image/ui_icon/warning.png" height="50" />
+							            <h:outputText value="#{imageManagedBean.emptyMessage}" />
+							        </h:panelGrid>
+							    </p:fieldset>
+							    
+		    					<p:idleMonitor  timeout="3000" >
+		       						<p:ajax event="active" update=":id_form:id_tab:id_lighbox_camera,:id_form:id_tab:id_delete_camera" />
+		   						</p:idleMonitor>
+		   						<p:lightBox styleClass="imagebox" id="id_lighbox_camera">  
+									<ui:repeat value="#{imageManagedBean.listImageCamera}" var="image">
+										<p:contextMenu for="id_image_camera">
+									        <p:menuitem value="Descargar" icon="ui-icon-arrowthick-1-s" ajax="false">
+									        	<p:fileDownload value="#{imageManagedBean.downloadImage(image)}" />
+									        </p:menuitem>
+							    		</p:contextMenu>
+									    <h:outputLink id="id_image_camera" value="#{image.pathWeb}" title="#{image.name}">  
+									        <h:graphicImage value="#{image.pathWeb}" id="id_cam" style="height: 77px; width: 100px;   margin-left: 2em; margin-bottom: 2em;" />  
+									    </h:outputLink>
+									</ui:repeat>
+							    </p:lightBox>
+						    </p:scrollPanel>
+						    
+			   			</div>
+			   		
+						<div class="ui-g-12" align="right" style="margin-top:10px;">
+	  						<p:commandButton value="Tomar fotografia" action="#{imageManagedBean.takePhoto()}" icon="fa fa-camera" disabled="#{imageManagedBean.disabled || imageManagedBean.disabledDevice}"  update=":id_form:id_growl,:id_form:id_tab:id_lighbox_camera,:id_form:id_tab:id_delete_camera" onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"/> 	
+	    					<p:commandButton id="id_delete_camera"  value="Eliminar imágenes" action="#{imageManagedBean.deleteAllImageCamera()}" icon="ui-icon-cancel" disabled="#{imageManagedBean.listImageCamera.size() == 0 ||imageManagedBean.disabled}" styleClass="buttonPF"  update=":id_form:id_growl,:id_form:id_tab:id_lighbox_camera,:id_form:id_tab:id_delete_camera" onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"/> 	
+	    				</div>
+		        </p:tab>
+		        
+		        <!-- Inicio: Pestania de Galeria -->
+		        <p:tab title="Galería">
+		       		<div class="ui-g">
+					    
+		   			  	<h:panelGrid columns="6" cellpadding="10">
+		   			  		<p:outputLabel for="id_cont_image" value="Número de imágenes a sincronizar:" />
+					        <p:selectOneMenu id="id_cont_image" value="#{imageManagedBean.numImage}" effect="fold" style="margin-right:5px;" disabled="#{imageManagedBean.disabled}">
+					       		<p:ajax event="change" listener="#{imageManagedBean.selectNumImageGallery()}" update=":id_form:id_growl"/>
+					            <f:selectItem itemLabel="5 imágenes" itemValue="5" />
+					            <f:selectItem itemLabel="10 imágenes" itemValue="10" />
+					            <f:selectItem itemLabel="15 imágenes" itemValue="15" />
+					        </p:selectOneMenu>
+					        
+					        <p:outputLabel for="id_cont_last_images" value="Número de imágenes sincronizadas:" />
+					        <p:inputText id="id_cont_last_images" value="#{imageManagedBean.contLastImages}" size="4" disabled="true"/>
+					        
+					        <p:commandButton value="Resetear contador" action="#{imageManagedBean.resetContLastImages()}"  icon="ui-icon-cancel" disabled="#{imageManagedBean.disabled}"  update=":id_form:id_growl,:id_form:id_tab:id_cont_last_images" /> 	
+					        
+		   			  	</h:panelGrid>
+		   			</div>
+		      
+		      		<div class="ui-g">
+		      			<p:scrollPanel  mode="native" styleClass="scrollPanelPF" >
+			      		
+			      			<p:fieldset  rendered="#{imageManagedBean.disabled}" toggleable="true"  legend="Notificación" style="margin-bottom:20px">
+						        <h:panelGrid columns="2" cellpadding="5">
+						            <p:graphicImage  value="./../resources/image/ui_icon/warning.png" height="50" />
+						            <h:outputText value="#{imageManagedBean.emptyMessage}" />
+						        </h:panelGrid>
+						    </p:fieldset>
+						    
+						    <p:idleMonitor  timeout="3000" >
+	       						<p:ajax event="active" update=":id_form:id_tab:id_lighbox_gallery,:id_form:id_tab:id_delete_gallery" />
+	   						</p:idleMonitor>
+	    					<p:lightBox styleClass="imagebox" id="id_lighbox_gallery">  
+								<ui:repeat value="#{imageManagedBean.listImageGallery}" var="image">
+									 <p:contextMenu for="id_image_gallery">
+								        <p:menuitem value="Detalles"  icon="ui-icon-search" update=":id_form:id_tab:id_image_detail" oncomplete="PF('eventDialog').show();" >
+								        	<f:setPropertyActionListener value="#{image}" target="#{imageManagedBean.imageSelected}"/>
+								        </p:menuitem>
+								        <p:menuitem value="Descargar" icon="ui-icon-arrowthick-1-s" ajax="false">
+								        	<p:fileDownload value="#{imageManagedBean.downloadImage(image)}" />
+								        </p:menuitem>
+						    		</p:contextMenu>
+								    <h:outputLink  id="id_image_gallery" value="#{image.pathWeb}" title="#{image.name}" >  
+								        <h:graphicImage value="#{image.pathWeb}" id="id_cam" style="height: 77px; width: 100px;   margin-left: 2em; margin-bottom: 2em;" />  
+								    </h:outputLink>
+								</ui:repeat>
+						    </p:lightBox>
+	    				  	<p:dialog  widgetVar="eventDialog" header="Detalles de la imagen" showEffect="clip" resizable="false" hideEffect="clip" width="700" height="100%">
+						 		<p:outputPanel id="id_image_detail">
+						            <p:fieldset legend="Detalles" style="margin-bottom:20px">
+								         <p:panelGrid  columns="4">
+						                	<h:outputText value="Nombre" style="font-weight: bold;"/>
+										    <h:outputText value="#{imageManagedBean.imageSelected.name}" />
+										 
+										    <h:outputText value="Tamaño" style="font-weight: bold;"/>
+										    <h:outputText value="#{imageManagedBean.imageSelected.size} KB" />
+										 
+										    <h:outputText value="Dimesiones (px)" style="font-weight: bold;"/>
+										    <h:outputText value="#{imageManagedBean.imageSelected.height} x #{imageManagedBean.imageSelected.width}" />
+										    
+										    <h:outputText value="Fecha de sincronización " style="font-weight: bold;"/>
+										    <h:outputText value="#{imageManagedBean.imageSelected.dateSynchronize}" >
+										    	<f:convertDateTime pattern="MM/dd/yyyy hh:mm a" />
+										    </h:outputText>
+										    
+										    <h:outputText value="Fecha de creación" style="font-weight: bold;" />
+										    <h:outputText value="#{imageManagedBean.imageSelected.dateAndroid}" >
+										    	<f:convertDateTime pattern="MM/dd/yyyy hh:mm a" />
+										    </h:outputText>
+										    
+										    <h:outputText value="Coordenadas de realización " style="font-weight: bold;"/>
+										    <p:columnGroup>
+										    	<p:outputLabel value="#{imageManagedBean.imageSelected.latitude==0? 'No consta' : imageManagedBean.imageSelected.latitude}" />
+										    	<p:outputLabel value="#{imageManagedBean.imageSelected.latitude==0? '' : ', '}" />
+										    	<p:outputLabel value="#{imageManagedBean.imageSelected.longitude==0? '' : imageManagedBean.imageSelected.longitude}" />
+										    </p:columnGroup>
+										    
+						            	</p:panelGrid>
+								    </p:fieldset>
+								    <p:fieldset legend="Lugar de realización" rendered="#{imageManagedBean.imageSelected.latitude!=0}" style="margin-bottom:20px">
+										<p:gmap rendered="#{imageManagedBean.imageSelected.latitude!=0}" id="id_gmap" center="#{imageManagedBean.centerGmap.lat}, #{imageManagedBean.centerGmap.lng}" zoom="20" type="HYBRID" style="width:100%;height:400px" model="#{imageManagedBean.markerGmap}"  />
+						        	</p:fieldset>
+						        </p:outputPanel>
+							
+				   			</p:dialog>   
+						</p:scrollPanel>	    
+		   			</div>
+		      		
+		      		<div class="ui-g-12" align="right" style="margin-top:10px;">
+  						<p:commandButton value="Sincronizar galería" action="#{imageManagedBean.syncronizeGallery()}"  icon="fa fa-refresh" disabled="#{imageManagedBean.disabled  || imageManagedBean.disabledDevice}"  update=":id_form:id_growl,:id_form:id_tab:id_lighbox_gallery,:id_form:id_tab:id_delete_camera" onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"/> 	
+    				    <p:commandButton id="id_delete_gallery" value="Eliminar imágenes" action="#{imageManagedBean.deleteAllImageGallery()}" icon="ui-icon-cancel" disabled="#{imageManagedBean.listImageGallery.size() == 0 || imageManagedBean.disabled}" styleClass="buttonPF"  update=":id_form:id_growl,:id_form:id_tab:id_lighbox_gallery,:id_form:id_tab:id_delete_camera" onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"/> 	
+    				</div>
+		      	</p:tab>
+		      	<!-- Fin: Pestania de Galeria -->
+		      
+		        
+			</p:tabView>
+			
+			<pe:blockUI widgetVar="blockUIWidget">  
+				<h:panelGrid columns="2">  
+			        <h:graphicImage  value="./../resources/image/ui_icon/load.gif" height="150" />  
+			        <h:outputText value="Sincronizando imagen..." style="white-space: nowrap;"/>  
+			    </h:panelGrid>  
+			</pe:blockUI>
+			
+    	</h:form>
+		
+	
+	
+		
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:pe="http://primefaces.org/ui/extensions"
+				template="./../template/DefaultLayout.xhtml">
+
+	<ui:define name="contenido" >
+	
+		<h:form id="id_form" >
+			<p:growl id="id_growl"  life="2000" showDetail="true"/>
+     		<p:tabView id="id_tab" dynamic="true" cache="true">
+				<p:tab   title="Análisis - Historial de llamadas">
+				
+					<div class="ui-g">
+  			  			<h:panelGrid columns="6" cellpadding="10">
+  			  				<p:outputLabel value="Mes de este año a mostrar:" />
+ 			  					<p:selectOneButton id="id_tipo_camara" value="#{callAnalysisManagedBean.monthView}" disabled="#{callAnalysisManagedBean.disabled}" >
+ 			  						<f:selectItems value="#{callAnalysisManagedBean.months}" var="month" itemLabel="#{month}" itemValue="#{month}" />
+					       		<p:ajax event="change" listener="#{callAnalysisManagedBean.selectMontView()}" update=":id_form:id_growl,:id_form:id_tab:id_chart"/>
+					    	</p:selectOneButton>
+  			  			</h:panelGrid>
+  			  			
+						<p:fieldset   rendered="#{callAnalysisManagedBean.disabled}" toggleable="true"  legend="Notificación" style="margin-bottom:20px">
+					        <h:panelGrid columns="2" cellpadding="5">
+					            <p:graphicImage  value="./../resources/image/ui_icon/warning.png" height="50" />
+					            <h:outputText value="#{callAnalysisManagedBean.emptyMessage}" />
+					        </h:panelGrid>
+					    </p:fieldset>  			  		
+				    </div>
+  
+  					<div class="ui-g">
+     					<p:chart id="id_chart" rendered="#{callAnalysisManagedBean.disabled == false}" type="bar" model="#{callAnalysisManagedBean.combinedModel}"  style="height:700px;" />
+      				</div>
+
+		 		</p:tab>
+		 	</p:tabView>
+		</h:form>
+		
+	</ui:define>
+	
+</ui:composition>

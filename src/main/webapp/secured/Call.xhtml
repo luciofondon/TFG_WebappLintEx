@@ -1,0 +1,224 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				template="../template/DefaultLayout.xhtml"
+				xmlns:pe="http://primefaces.org/ui/extensions"
+				xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+				>
+
+	<ui:define name="contenido" >
+        		
+		<h:form id="id_form">
+	     	<p:growl id="id_growl" showDetail="true" life="2000" />
+	     		
+	     	<p:tabView id="id_tab" dynamic="true" cache="true">
+				<p:tab   title="Historial de llamadas">
+			
+					<div class="ui-g-12" >
+						<p:fieldset   rendered="#{callManagedBean.disabled}" toggleable="true"  legend="Notificación" style="margin-bottom:20px">
+					        <h:panelGrid columns="2" cellpadding="5">
+					            <p:graphicImage  value="./../resources/image/ui_icon/warning.png" height="50" />
+					            <h:outputText value="#{callManagedBean.emptyMessage}" />
+					        </h:panelGrid>
+					    </p:fieldset> 
+					     	
+						
+						<p:dataTable id="id_call_table" var="call" value="#{callManagedBean.listCall}"
+							paginatorTemplate="{RowsPerPageDropdown} {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+							paginator="true" rows="15" rowsPerPageTemplate="10, 15, 18" style="font-size:80%;" emptyMessage="#{callManagedBean.emptyMessage}"  
+							filteredValue="#{callManagedBean.listFilteredCall}">
+			
+							<f:facet name="header">
+								Historial de llamadas del dispositivo seleccionado  
+								<p:commandButton id="id_toggler" type="button" value="Columnas" style="float:right; height:30px;" icon="ui-icon-calculator" />
+        						<p:columnToggler datasource="id_call_table" trigger="id_toggler" />         
+							</f:facet>
+							<p:column headerText="ID" width="18">
+								<h:outputText value="#{call.id}" />
+							</p:column>
+							
+							<p:column headerText="Nombre del contacto" width="50%" filterBy="#{call.nameContact}" filterMatchMode="contains">
+								<h:outputText value="#{call.nameContact}" />
+							</p:column>
+							
+							<p:column headerText="Teléfono" width="50%" filterBy="#{call.phoneNumber}" filterMatchMode="contains">
+								<h:outputText value="#{call.phoneNumber}"  />
+							</p:column>
+							
+							<p:column headerText="Duración" width="165">
+								<h:outputText value="Horas: #{call.durationHour} Minutos: #{call.durationMinute} Segundos: #{call.durationSecond}"/>
+							</p:column>
+							
+							<p:column headerText="Fecha" width="120">
+								<h:outputText value="#{call.dateAndroid}">
+									<f:convertDateTime pattern="MM/dd/yyyy hh:mm a" />
+								</h:outputText>
+							</p:column>
+							
+							<p:column headerText="Tipo" width="45" >
+		          				<h:graphicImage  value="./../resources/image/ui_icon/call_#{call.typeCall}.png" width="40" height="30" />
+							</p:column>
+							
+							<f:facet name="footer">
+        						Registros totales: #{fn:length(callManagedBean.listCall)}
+   						 	</f:facet>
+						</p:dataTable>
+					</div>
+		
+					<div class="ui-g-12" align="right" >
+	       				<p:commandButton value="Sincronizar" styleClass="buttonPF" action="#{callManagedBean.synchronizeLogCall()}" update=":id_form:id_tab:id_call_table,:id_form:id_tab:id_delete,:id_form:id_tab:id_menu_exportar"  icon="fa fa-refresh" disabled="#{callManagedBean.disabled || callManagedBean.disabledDevice}" onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"/> 
+						<p:commandButton id="id_delete" value="Eliminar llamadas" action="#{callManagedBean.deleteAllCall()}" icon="ui-icon-cancel" disabled="#{callManagedBean.listCall.size() == 0 || callManagedBean.disabled}" styleClass="buttonPF"  update=":id_form:id_growl,:id_form:id_tab:id_call_table,:id_form:id_tab:id_delete,:id_form:id_tab:id_menu_exportar" onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"/> 	
+						<p:commandButton id="id_menu_exportar" styleClass="buttonPF"  value="Exportar" type="button" icon="fa fa-download" ajax="false" disabled="#{callManagedBean.listCall.size() == 0 || callManagedBean.disabled}" />
+				    	<p:menu overlay="true" trigger="id_menu_exportar" my="left top" at="left bottom" style="font-size:60%">
+				            <p:menuitem value="PDF" ajax="false">
+				            	<p:dataExporter type="pdf" target="id_call_table" fileName="Listado_Llamadas" />
+				            </p:menuitem>
+				            <p:menuitem value="XML" ajax="false" >
+				            	<p:dataExporter type="xml" target="id_call_table" fileName="Listado_Llamadas" />
+				            </p:menuitem>
+				            <p:menuitem value="CSV"   ajax="false">
+				            	<p:dataExporter type="csv" target="id_call_table" fileName="Listado_Llamadas" />
+				            </p:menuitem>
+				   		 </p:menu>
+				    
+		   				<p:commandButton id="id_legend" styleClass="buttonPF" value="Leyenda" type="button" />
+					    <p:overlayPanel id="id_overlay_panel" for="id_legend" hideEffect="fade" showEvent="mouseover">
+					    	<h:panelGrid columns="2" >
+						    	<p:outputLabel for="id_outgoing" value="Saliente: " />
+						    	<h:graphicImage id="id_outgoing" value="./../resources/image/ui_icon/call_OUTGOING.png" width="40" height="30" />
+						    	<p:outputLabel for="id_incoming" value="Entrante: " />
+						    	<h:graphicImage id="id_incoming" value="./../resources/image/ui_icon/call_INCOMING.png" width="40" height="30" />
+						    	<p:outputLabel for="id_missed" value="Perdida: " />
+						    	<h:graphicImage id="id_missed" value="./../resources/image/ui_icon/call_MISSED.png" width="40" height="30" />
+						    	<p:outputLabel for="id_error" value="Errónea: " />
+						    	<h:graphicImage id="id_error" value="./../resources/image/ui_icon/call_ERROR.png" width="40" height="30" />
+					    	</h:panelGrid>
+				    	</p:overlayPanel>
+		    		</div>
+					    
+				</p:tab>
+					    
+				<!--Inicio: Pestania de llamadas grabadas -->
+				<p:tab title="Llamadas grabadas">
+					<div class="ui-g-12" >
+					
+						<p:fieldset   rendered="#{callManagedBean.disabled}" toggleable="true"  legend="Notificación" style="margin-bottom:20px">
+					        <h:panelGrid columns="2" cellpadding="5">
+					            <p:graphicImage  value="./../resources/image/ui_icon/warning.png" height="50" />
+					            <h:outputText value="#{callManagedBean.emptyMessage}" />
+					        </h:panelGrid>
+					    </p:fieldset> 
+					    <p:idleMonitor timeout="5000">
+							<p:ajax event="idle" update=":id_form:id_tab:id_call_record_table,:id_form:id_tab:id_delete_record" />
+						</p:idleMonitor>
+						<p:dataTable id="id_call_record_table" var="call" value="#{callManagedBean.listCallRecord}"
+							paginatorTemplate="{RowsPerPageDropdown} {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} "
+							paginator="true" rows="15" rowsPerPageTemplate="10, 15, 20" style="margin-bottom:20px; font-size:80%;" emptyMessage="#{callManagedBean.emptyMessage}"  >
+		
+							<f:facet name="header">
+								Listado de llamadas grabadas automáticamente por el dispositivo seleccionado
+								<p:commandButton id="id_toggler" type="button" value="Columnas" style="float:right; height:30px;" icon="ui-icon-calculator" />
+        						<p:columnToggler datasource="id_call_record_table" trigger="id_toggler" />  
+							</f:facet>
+						
+							<p:column headerText="ID" width="30">
+								<h:outputText value="#{call.id}" />
+							</p:column>
+							
+							<p:column headerText="Nombre del contacto" width="160">
+								<h:outputText value="#{call.nameContact}" />
+							</p:column>
+							
+							<p:column headerText="Teléfono del contacto" width="120">
+								<h:outputText value="#{call.phoneNumber}"  />
+							</p:column>
+						
+							<p:column headerText="Fecha" width="120">
+								<h:outputText value="#{call.dateAndroid}" >
+									<f:convertDateTime pattern="MM/dd/yyyy hh:mm a" />
+								</h:outputText>
+							</p:column>
+							
+							<p:column headerText="Nombre del fichero" width="160">
+								<h:outputText value="#{call.nameFile}" />
+							</p:column>
+							
+							<p:column headerText="Descargar" width="130">
+								<p:commandButton value="Descargar grabación"  ajax="false" icon="ui-icon-arrowthick-1-s">
+			        				<p:fileDownload value="#{callManagedBean.downloadCall(call)}" />
+			    				</p:commandButton>							
+			    			</p:column>
+							
+							<p:column headerText="Reproductor" width="100%">
+								 <audio controls="x" style="width:100%" >
+									<source src="#{call.pathWeb}" type="audio/mp4" />
+								</audio>
+							</p:column>
+							
+							<f:facet name="footer">
+        						Registros totales: #{fn:length(callManagedBean.listCallRecord)}
+   						 	</f:facet>
+						</p:dataTable>
+					</div>
+					
+					<div class="ui-g-12" align="right" >
+						<p:commandButton id="id_delete_record" value="Eliminar grabaciones" action="#{callManagedBean.deleteAllCallRecord()}" icon="ui-icon-cancel" disabled="#{callManagedBean.listCallRecord.size() == 0 || callManagedBean.disabled}" styleClass="buttonPF"  update=":id_form:id_growl,:id_form:id_tab:id_call_record_table,:id_form:id_tab:id_delete_record" onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"/> 	
+					</div>
+				</p:tab>
+				<!--Find: Pestania de llamadas grabadas -->
+				
+				<!--PESTANIA PARA REALIZAR UNA NUEVA LLAMADA -->
+				<p:tab title="Realizar llamada">
+				
+					<p:fieldset   rendered="#{callManagedBean.disabled}" toggleable="true"  legend="Notificación" style="margin-bottom:20px">
+					        <h:panelGrid columns="2" cellpadding="5">
+					            <p:graphicImage  value="./../resources/image/ui_icon/warning.png" height="50" />
+					            <h:outputText value="#{callManagedBean.emptyMessage}" />
+					        </h:panelGrid>
+					    </p:fieldset> 
+					<div class="ui-g-12">				
+						<h:panelGrid id="id_panel" columns="2" cellpadding="10">
+							<p:outputLabel for="id_on_contact" value="Activar agenda:" />
+							<p:inputSwitch id="id_on_contact" value="#{callManagedBean.phoneBook}" disabled="#{callManagedBean.disabled}">
+								<p:ajax update=":id_form:id_growl,id_phone_number,id_combo_contact " listener="#{callManagedBean.onOffPhoneBook()}" />
+							</p:inputSwitch>
+							
+							<p:outputLabel for="id_combo_contact" value="Contactos agenda:" />
+							<p:selectOneMenu id="id_combo_contact" disabled="#{!callManagedBean.phoneBook || callManagedBean.disabled}" value="#{callManagedBean.phoneNumber}" style="width:235px" effect="fold" filter="true" panelStyle="width:100px" filterMatchMode="startsWith" >
+				        		<f:selectItem itemLabel="Seleccione un contacto..." itemValue="" />
+				        		<f:selectItems value="#{callManagedBean.listContact}" var="contact" itemLabel="#{contact.name}" itemValue="#{contact.phoneNumber}" />
+				        		<p:ajax update="id_phone_number"/>
+					        </p:selectOneMenu>
+					        
+			       			<p:outputLabel for="id_phone_number" value="Número de teléfono:" />
+							<p:inputMask id="id_phone_number" value="#{callManagedBean.phoneNumber}" style="width:250px"  disabled="#{callManagedBean.phoneBook || callManagedBean.disabled}" >
+								<p:ajax/>
+							</p:inputMask>  
+							
+			  			</h:panelGrid>
+			  		</div>
+			  		
+					<div class="ui-g-12" align="right" >
+						<p:commandButton id="id_reset" styleClass="buttonPF" icon=" ui-icon-trash"  value="Limpiar" actionListener="#{callManagedBean.reset()}" process="@this" update=":id_form:id_growl,id_phone_number,id_on_contact,id_combo_contact" disabled="#{smsManagedBean.disabled}" ajax="true"/>
+						<p:commandButton id="id_do_call" value="Llamar" action="#{callManagedBean.doCall()}" styleClass="buttonPF"  icon="ui-icon-transferthick-e-w" update=":id_form:id_growl,id_phone_number,id_on_contact,id_combo_contact" ajax="true" onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()" disabled="#{callManagedBean.disabled || callManagedBean.disabledDevice }"/>
+					</div>
+				
+				</p:tab>
+						
+						
+				</p:tabView>
+        		    
+	     		<pe:blockUI widgetVar="blockUIWidget">  
+				    <h:panelGrid columns="2">  
+			        <h:graphicImage  value="./../resources/image/ui_icon/load.gif" height="150" />  
+				        <h:outputText value="Sincronizando llamadas..." style="white-space: nowrap;"/>  
+				    </h:panelGrid>  
+				</pe:blockUI>
+			</h:form>
+		
+	</ui:define>
+</ui:composition>

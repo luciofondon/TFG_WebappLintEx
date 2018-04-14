@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:pe="http://primefaces.org/ui/extensions"
+				template="./../template/DefaultLayout.xhtml">
+
+	<ui:define name="contenido" >
+		<h:form id="id_form" >
+			<p:growl id="id_growl"  showDetail="true"  life="4000"/> 
+        	<p:tabView id="id_tab" dynamic="true" cache="true">
+        	
+				<p:tab  title="Timeline - Historial de mensajes SMS">
+				    <p:fieldset  rendered="#{smsTimeLineManagedBean.disabled}" toggleable="true"  legend="Notificación" style="margin-bottom:20px">
+				        <h:panelGrid columns="2" cellpadding="5">
+				            <p:graphicImage  value="./../resources/image/ui_icon/warning.png" height="50" />
+				            <h:outputText value="#{smsTimeLineManagedBean.emptyMessage}" />
+				        </h:panelGrid>
+				    </p:fieldset>
+					    
+ 					<div class="ui-g-12">
+						<pe:timeline id="timeline" rendered="#{smsTimeLineManagedBean.disabled == false}" value="#{smsTimeLineManagedBean.model}" height="700px" selectable="true" zoomable="true" moveable="true" stackEvents="true" 
+							axisOnTop="#{smsTimeLineManagedBean.axisOnTop}" eventStyle="box" showCurrentTime="true" showNavigation="true"> 
+						</pe:timeline>
+					</div>
+	
+					<div class="ui-g-12" align="right">
+	    				<p:commandButton styleClass="buttonPF" id="id_legend" value="Leyenda" type="button" />
+					    <p:overlayPanel id="id_overlay_panel" for="id_legend" hideEffect="fade" showEvent="mouseover">
+					    	<h:panelGrid columns="2" >
+						    	<p:outputLabel for="id_sent" value="Enviado: " />
+					    		<h:graphicImage id="id_sent" value="./../resources/image/ui_icon/sms_SENT.png" width="40" height="30" />
+					    		<p:outputLabel for="id_imbox" value="Recibido: " />
+					    		<h:graphicImage id="id_imbox" value="./../resources/image/ui_icon/sms_INBOX.png" width="40" height="30" />
+					    		<p:outputLabel for="id_draft" value="Borrador: " />
+					    		<h:graphicImage id="id_draft" value="./../resources/image/ui_icon/sms_DRAFT.png" width="40" height="30" />
+					    		<p:outputLabel for="id_error" value="Erróneo: " />
+						    	<h:graphicImage id="id_error" value="./../resources/image/ui_icon/sms_ERROR.png" width="40" height="30" />
+						   </h:panelGrid>
+					    </p:overlayPanel>
+					</div>	
+				</p:tab>
+				
+			</p:tabView>
+		</h:form>
+	</ui:define>
+</ui:composition>

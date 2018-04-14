@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+				http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+	version="2.0">
+
+	<application>
+		<el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
+	</application>
+
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+
+		<!-- Inicio: Audio -->
+		<navigation-case>
+			<from-outcome>audio</from-outcome>
+			<to-view-id>/secured/Audio.xhtml</to-view-id>
+		</navigation-case>
+		<!-- Fin: Audio -->
+
+		<!-- Inicio: Baliza -->
+		<navigation-case>
+			<from-outcome>beacon</from-outcome>
+			<to-view-id>/secured/Beacon.xhtml</to-view-id>
+		</navigation-case>
+		<!-- Fin: Baliza -->
+
+		<!-- Inicio: Navegador web -->
+		<navigation-case>
+			<from-outcome>browser</from-outcome>
+			<to-view-id>/secured/Browser.xhtml</to-view-id>
+		</navigation-case>
+		<!-- Fin: Navegador web -->
+
+		<!-- Inicio: Calendario -->
+		<navigation-case>
+			<from-outcome>calendar</from-outcome>
+			<to-view-id>/secured/Calendar.xhtml</to-view-id>
+		</navigation-case>
+		<!-- Fin: Calendario -->
+		
+		<!-- Inicio: Llamadas -->
+		<navigation-case>
+			<from-outcome>call</from-outcome>
+			<to-view-id>/secured/Call.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>call_analysis</from-outcome>
+			<to-view-id>/secured/CallAnalysis.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>call_time_line</from-outcome>
+			<to-view-id>/secured/CallTimeLine.xhtml</to-view-id>
+		</navigation-case>
+		<!-- Fin: Llamadas -->
+		
+		<!-- Inicio: Configuracion -->
+		<navigation-case>
+			<from-outcome>configuration</from-outcome>
+			<to-view-id>/secured/Configuration.xhtml</to-view-id>
+		</navigation-case>
+		<!-- Fin: Configuracion -->
+		
+		<!-- Inicio: Contactos -->
+		<navigation-case>
+			<from-outcome>contact</from-outcome>
+			<to-view-id>/secured/Contact.xhtml</to-view-id>
+		</navigation-case>
+		<!-- Fin: Contactos -->
+
+		<!-- Inicio: Imagen -->
+		<navigation-case>
+			<from-outcome>image</from-outcome>
+			<to-view-id>/secured/Image.xhtml</to-view-id>
+		</navigation-case>
+		<!-- Fin: Imagen -->
+
+		<!-- Inicio: Recursos memoria -->
+		<navigation-case>
+			<from-outcome>resource</from-outcome>
+			<to-view-id>/secured/Resource.xhtml</to-view-id>
+		</navigation-case>
+		<!-- Fin: Recursos memoria -->
+		
+		<!-- Inicio: Sms -->
+		<navigation-case>
+			<from-outcome>sms</from-outcome>
+			<to-view-id>/secured/Sms.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>sms_analysis</from-outcome>
+			<to-view-id>/secured/SmsAnalysis.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>sms_time_line</from-outcome>
+			<to-view-id>/secured/SmsTimeLine.xhtml</to-view-id>
+		</navigation-case>
+		<!-- Fin: Sms -->
+
+		<!-- Inicio: Video -->
+		<navigation-case>
+			<from-outcome>video</from-outcome>
+			<to-view-id>/secured/Video.xhtml</to-view-id>
+		</navigation-case>
+		<!-- Fin: Video -->
+
+
+	
+
+	
+
+
+
+		<navigation-case>
+			<from-outcome>device</from-outcome>
+			<to-view-id>/secured/Device.xhtml</to-view-id>
+		</navigation-case>
+
+
+	
+		<navigation-case>
+			<from-outcome>logout</from-outcome>
+			<to-view-id>/Login.xhtml</to-view-id>
+		</navigation-case>
+	
+
+		<navigation-case>
+			<from-outcome>device_detail</from-outcome>
+			<to-view-id>/secured/DeviceDetail.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>app</from-outcome>
+			<to-view-id>/secured/DeviceDetail.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>logout</from-outcome>
+			<to-view-id>/Login.xhtml</to-view-id>
+		</navigation-case>
+
+	
+		<navigation-case>
+			<from-outcome>browser_analysis</from-outcome>
+			<to-view-id>/secured/BrowserAnalysis.xhtml</to-view-id>
+		</navigation-case>
+
+
+
+
+
+	</navigation-rule>
+
+
+	<navigation-rule>
+		<from-view-id>/secured/DeviceDetail.xhtml</from-view-id>
+		<navigation-case>
+			<from-outcome>back</from-outcome>
+			<to-view-id>/secured/Device.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+
+	<navigation-rule>
+		<from-view-id>/Login.xhtml</from-view-id>
+	
+		<navigation-case>
+			<from-outcome>login</from-outcome>
+			<to-view-id>/secured/Device.xhtml</to-view-id>
+		</navigation-case>
+
+	</navigation-rule>
+	
+	
+	
+
+</faces-config>

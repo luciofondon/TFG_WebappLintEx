@@ -1,0 +1,141 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				template="../template/DefaultLayout.xhtml"
+				xmlns:pe="http://primefaces.org/ui/extensions"
+				
+				>
+
+	<ui:define name="contenido">
+		<h:form id="id_form">
+			<p:growl id="id_growl" showDetail="true" life="2000" />
+			<p:tabView id="id_tab" dynamic="true" cache="true">
+			
+				<!-- Inicio: Pestania red movil y wifi -->
+				<p:tab   title="GPS">
+					<div class="ui-g-12">
+						<h:panelGrid id="id_panel_gps" columns="6" cellpadding="20">
+							<h:outputText value="Fecha del histórico a mostrar:"/>
+							<p:calendar id="id_calendar_gps"  value="#{beaconManagedBean.dateView}" maxdate="#{beaconManagedBean.dateToday}" navigator="true" effect="fold" disabled="#{beaconManagedBean.disabled}">
+								<p:ajax  event="dateSelect" listener="#{beaconManagedBean.onDateSelect}" update="id_form" />
+							</p:calendar>
+							
+							<p:outputLabel for="id_precision_gps" value="Precisión del balizamiento:" />
+					        <p:selectOneMenu id="id_precision_gps" value="#{beaconManagedBean.precision}" effect="fold" disabled="#{beaconManagedBean.disabled}">
+					       		<p:ajax event="change" listener="#{beaconManagedBean.onPrecisionSelect}" update=":id_form:id_growl" />
+					            <f:selectItem itemLabel="30 segundos" itemValue="30" />
+					            <f:selectItem itemLabel="1 minuto" itemValue="1" />
+					            <f:selectItem itemLabel="5 minutos" itemValue="5" />
+					            <f:selectItem itemLabel="10 minutos" itemValue="10" />
+					        </p:selectOneMenu>
+					        
+					        <h:outputText value="GPS activado:"/>
+						    <p:selectBooleanButton id="id_start_enabled_gps" value="#{beaconManagedBean.enabledGps}" disabled="#{beaconManagedBean.disabled}"  onLabel="Desactivar GPS" offLabel="Activar GPS" onIcon="ui-icon-stop" offIcon="ui-icon-play" onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()">
+				        		<p:ajax listener="#{beaconManagedBean.enabledGps()}" update=":id_form:id_growl" />
+				        	</p:selectBooleanButton>
+						</h:panelGrid>
+						
+						<p:fieldset   rendered="#{beaconManagedBean.disabled}" toggleable="true"  legend="Notificación" style="margin-bottom:20px">
+					        <h:panelGrid columns="2" cellpadding="5">
+					            <p:graphicImage  value="./../resources/image/ui_icon/warning.png" height="50" />
+					            <h:outputText value="#{beaconManagedBean.emptyMessage}" />
+					        </h:panelGrid>
+					    </p:fieldset>
+					    
+					
+					</div>
+			    
+			   		<div class="ui-g-12" >
+						<p:gmap id="id_gmap_gps" rendered="#{beaconManagedBean.disabled == false}" center="#{beaconManagedBean.centerGmapGps.lat}, #{beaconManagedBean.centerGmapGps.lng}" zoom="20" type="HYBRID" model="#{beaconManagedBean.markerGmapGps}" style="height:650px;" />
+		   		 	</div>
+		   		 	
+		   		 	<div class="ui-g-12" align="right" >
+		   		 	   	<p:selectBooleanButton id="id_start_stop_gps" value="#{beaconManagedBean.startBeaconGps}" disabled="#{beaconManagedBean.disabled}" styleClass="buttonPF"  onLabel="Parar balizamiento" offLabel="Iniciar balizamiento" onIcon="ui-icon-stop" offIcon="ui-icon-play" onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()">
+			        		<p:ajax listener="#{beaconManagedBean.startBeaconGps()}" update=":id_form:id_growl" />
+			        	</p:selectBooleanButton>
+		   		 	 	<p:commandButton value="Actualizar posición actual" disabled="#{beaconManagedBean.disabled}" styleClass="buttonPF" action="#{beaconManagedBean.synchronizeActualPosition()}" update=":id_form:id_growl"  icon="fa fa-refresh"  onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"/> 
+		   		 	</div>
+				</p:tab>
+			
+				<!-- Inicio: Pestania red movil y wifi -->
+				<p:tab   title="Red móvil / WI-FI">
+					<div class="ui-g-12">
+						<h:panelGrid id="id_panel_network" columns="6" cellpadding="20">
+							<h:outputText value="Fecha del histórico a mostrar:"/>
+							<p:calendar id="id_calendar_network"  value="#{beaconManagedBean.dateView}" maxdate="#{beaconManagedBean.dateToday}" navigator="true" effect="fold">
+								<p:ajax  event="dateSelect" listener="#{beaconManagedBean.onDateSelect}" update="id_form" />
+							</p:calendar>
+							
+							<p:outputLabel for="id_precision_network" value="Precisión del balizamiento:" />
+					        <p:selectOneMenu id="id_precision_network" value="#{beaconManagedBean.precision}" effect="fold">
+					       		<p:ajax event="change" listener="#{beaconManagedBean.onPrecisionSelect}" update=":id_form:id_growl" />
+					            <f:selectItem itemLabel="30 segundos" itemValue="30" />
+					            <f:selectItem itemLabel="1 minuto" itemValue="1" />
+					            <f:selectItem itemLabel="5 minutos" itemValue="5" />
+					            <f:selectItem itemLabel="10 minutos" itemValue="10" />
+					        </p:selectOneMenu>
+						</h:panelGrid>
+					</div>
+					
+					<div class="ui-g-12">
+						<p:gmap id="id_gmap_network" center="#{beaconManagedBean.centerGmapNetwork.lat}, #{beaconManagedBean.centerGmapNetwork.lng}" zoom="20" type="HYBRID" model="#{beaconManagedBean.markerGmapNetwork}" style="height:650px;" />
+		   		 	</div>
+		   		 	
+		   		 	<div class="ui-g-12" align="right" >
+		   		 	   	<p:selectBooleanButton id="id_start_stop_network" value="#{beaconManagedBean.startBeaconNetwork}" styleClass="buttonPF"  onLabel="Parar balizamiento" offLabel="Iniciar balizamiento" onIcon="ui-icon-stop" offIcon="ui-icon-play">
+			        		<p:ajax listener="#{beaconManagedBean.startBeaconNetwork()}" update=":id_form:id_growl"/>
+			        	</p:selectBooleanButton>
+		   		 	 	<p:commandButton value="Actualizar posición actual" styleClass="buttonPF" action="#{beaconManagedBean.synchronizeActualPosition()}" update=":id_form:id_growl"  icon="fa fa-refresh"  onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"/> 
+		   		 	</div>
+						
+				</p:tab>
+				<!-- Fin: Pestania red movil y wifi -->
+			
+			
+				<!-- Inicio: Pestania pasivo -->
+				<p:tab   title="Pasivo">
+					<div class="ui-g-12">
+						<h:panelGrid id="id_panel" columns="6" cellpadding="20">
+							<h:outputText value="Fecha del histórico a mostrar:"/>
+							<p:calendar id="id_calendar"  value="#{beaconManagedBean.dateView}" maxdate="#{beaconManagedBean.dateToday}" navigator="true" effect="fold">
+								<p:ajax  event="dateSelect" listener="#{beaconManagedBean.onDateSelect}" update="id_form" />
+							</p:calendar>
+							
+							<p:outputLabel for="id_precision" value="Precisión del balizamiento:" />
+					        <p:selectOneMenu id="id_precision" value="#{beaconManagedBean.precision}" effect="fold">
+					       		<p:ajax event="change" listener="#{beaconManagedBean.onPrecisionSelect}" update=":id_form:id_growl" />
+					            <f:selectItem itemLabel="30 segundos" itemValue="30" />
+					            <f:selectItem itemLabel="1 minuto" itemValue="1" />
+					            <f:selectItem itemLabel="5 minutos" itemValue="5" />
+					            <f:selectItem itemLabel="10 minutos" itemValue="10" />
+					        </p:selectOneMenu>
+						</h:panelGrid>
+					</div>
+					
+					<div class="ui-g-12">
+						<p:gmap id="id_gmap_passive" center="#{beaconManagedBean.centerGmapPassive.lat}, #{beaconManagedBean.centerGmapPassive.lng}" zoom="20" type="HYBRID" model="#{beaconManagedBean.markerGmapPassive}" style="height:650px;" />
+					</div>	
+					
+					<div class="ui-g-12" align="right" >
+		   		 	   	<p:selectBooleanButton id="id_start_stop_passive" value="#{beaconManagedBean.startBeaconPassive}" styleClass="buttonPF"  onLabel="Parar balizamiento" offLabel="Iniciar balizamiento" onIcon="ui-icon-stop" offIcon="ui-icon-play">
+			        		<p:ajax listener="#{beaconManagedBean.startBeaconPassive()}" update=":id_form:id_growl" />
+			        	</p:selectBooleanButton>
+		   		 	 	<p:commandButton value="Actualizar posición actual" styleClass="buttonPF" action="#{beaconManagedBean.synchronizeActualPosition()}" update=":id_form:id_growl"  icon="fa fa-refresh"  onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"/> 
+		   		 	</div>				
+				</p:tab>
+				<!-- Find: Pestania pasivo -->
+			
+			</p:tabView>
+			<pe:blockUI widgetVar="blockUIWidget">  
+			    <h:panelGrid columns="2">  
+			        <h:graphicImage  value="load.gif"  />  
+			        <h:outputText value="#{beaconManagedBean.synchronizeMessage}" style="white-space: nowrap;"/>  
+			    </h:panelGrid>  
+			</pe:blockUI>
+   		</h:form>
+	</ui:define>
+</ui:composition>

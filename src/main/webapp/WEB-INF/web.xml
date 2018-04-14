@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" 
+	xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+	http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	id="WebApp_ID" version="2.5">
+
+  <display-name>WebApp Unex</display-name>
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
+            /WEB-INF/applicationContext.xml
+            
+        </param-value>
+    </context-param>
+    
+
+   
+    
+   
+
+
+    
+    
+    	
+
+
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    <listener>
+        <listener-class>
+            org.springframework.web.context.request.RequestContextListener
+        </listener-class>
+    </listener>
+    <!-- Change to "Production" when you are ready to deploy -->
+	<context-param>
+		<param-name>javax.faces.PROJECT_STAGE</param-name>
+		<param-value>Development</param-value>
+	</context-param>
+
+	<!-- Inicio: Pagina de bienvenida -->
+	<welcome-file-list>
+		<welcome-file>Login.xhtml</welcome-file>
+	</welcome-file-list>
+	<!-- Fin: Pagina de bienvenida -->
+
+
+	<!-- JSF mapping -->
+	<servlet>
+		<servlet-name>Faces Servlet</servlet-name>
+		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	
+	
+
+	
+	
+	<!-- Inicio: Definicion de Servlet. -->
+	
+	<servlet>
+		<description>
+		</description>
+		<display-name>AudioListener</display-name>
+		<servlet-name>AudioListener</servlet-name>
+		<servlet-class>es.unex.giiis.tfg.servlet.AudioListener</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AudioListener</servlet-name>
+		<url-pattern>/AudioListener</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<description>
+		</description>
+		<display-name>BeaconListener</display-name>
+		<servlet-name>BeaconListener</servlet-name>
+		<servlet-class>es.unex.giiis.tfg.servlet.BeaconListener</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>BeaconListener</servlet-name>
+		<url-pattern>/BeaconListener</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<description>
+		</description>
+		<display-name>BrowserListener</display-name>
+		<servlet-name>BrowserListener</servlet-name>
+		<servlet-class>es.unex.giiis.tfg.servlet.BrowserListener</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>BrowserListener</servlet-name>
+		<url-pattern>/BrowserListener</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<description>
+		</description>
+		<display-name>CallListener</display-name>
+		<servlet-name>CallListener</servlet-name>
+		<servlet-class>es.unex.giiis.tfg.servlet.CallListener</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>CallListener</servlet-name>
+		<url-pattern>/CallListener</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<description>
+		</description>
+		<display-name>ContactListener</display-name>
+		<servlet-name>ContactListener</servlet-name>
+		<servlet-class>es.unex.giiis.tfg.servlet.ContactListener</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ContactListener</servlet-name>
+		<url-pattern>/ContactListener</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<description>
+		</description>
+		<display-name>DeviceListener</display-name>
+		<servlet-name>DeviceListener</servlet-name>
+		<servlet-class>es.unex.giiis.tfg.servlet.DeviceListener</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DeviceListener</servlet-name>
+		<url-pattern>/DeviceListener</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<description>
+		</description>
+		<display-name>ImageListener</display-name>
+		<servlet-name>ImageListener</servlet-name>
+		<servlet-class>es.unex.giiis.tfg.servlet.ImageListener</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ImageListener</servlet-name>
+		<url-pattern>/ImageListener</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<description>
+		</description>
+		<display-name>ResourceListener</display-name>
+		<servlet-name>ResourceListener</servlet-name>
+		<servlet-class>es.unex.giiis.tfg.servlet.ResourceListener</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ResourceListener</servlet-name>
+		<url-pattern>/ResourceListener</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<description>
+		</description>
+		<display-name>SmsListener</display-name>
+		<servlet-name>SmsListener</servlet-name>
+		<servlet-class>es.unex.giiis.tfg.servlet.SmsListener</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SmsListener</servlet-name>
+		<url-pattern>/SmsListener</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<description>
+		</description>
+		<display-name>VideoListener</display-name>
+		<servlet-name>VideoListener</servlet-name>
+		<servlet-class>es.unex.giiis.tfg.servlet.VideoListener</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>VideoListener</servlet-name>
+		<url-pattern>/VideoListener</url-pattern>
+	</servlet-mapping>
+	
+	<!-- Fin: Definicion de Servlet. -->
+
+
+
+
+		
+	<!-- Inicio: Mapping para JSF. -->
+	
+	<!--  
+	<servlet-mapping>
+		<servlet-name>Faces Servlet</servlet-name>
+		<url-pattern>/faces/*</url-pattern>
+	</servlet-mapping>
+	-->
+	<servlet-mapping>
+		<servlet-name>Faces Servlet</servlet-name>
+		<url-pattern>*.xhtml</url-pattern>
+	</servlet-mapping> 
+	
+	<!-- Fin: Mapping para JSF. -->
+
+
+
+
+
+
+
+
+	
+
+
+
+	
+	<!-- Inicio: Tema de Primefaces. -->
+	<context-param>
+		<param-name>primefaces.THEME</param-name>
+		<param-value>#{loginManagedBean.theme}</param-value>
+	</context-param>
+	<!-- Fin: Tema de Primefaces. -->
+	
+	<!-- Inicio: Iconos extras de Primefaces.  -->
+	<context-param>
+   		<param-name>primefaces.FONT_AWESOME</param-name>
+   		<param-value>true</param-value>
+   	</context-param>
+   	<!-- Fin: Iconos extras de Primefaces.  -->
+   
+   
+   	<session-config>
+		<session-timeout> 30 </session-timeout>
+	</session-config>
+	
+	
+	<context-param>
+    <param-name>RootPath</param-name>
+    <param-value>/Users/luciofondon/Desktop/T.F.G./workspace/workspace_web/WebApp5</param-value>
+</context-param>
+	
+
+</web-app>

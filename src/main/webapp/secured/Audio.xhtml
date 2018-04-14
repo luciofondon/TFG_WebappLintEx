@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				template="../template/DefaultLayout.xhtml"
+				xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+				xmlns:pe="http://primefaces.org/ui/extensions"
+				xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+				>
+
+	<ui:define name="contenido">
+		<h:form id="id_form">   
+			<p:growl id="id_growl" life="2000" showDetail="true" />
+			
+			<p:tabView id="id_tab" dynamic="true" cache="true">
+				<p:tab   title="Grabaciones de audio">
+					<div class="ui-g">
+		 			  	<h:panelGrid columns="6" cellpadding="10">
+							<p:outputLabel for="id_save" value="Guardar audio en el dispositivo:" />
+							<p:selectBooleanButton id="id_save" value="#{audioManagedBean.save}" onLabel="Sí" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" style="width:60px" disabled="#{audioManagedBean.disabled}" >
+								<p:ajax update=":id_form:id_growl" listener="#{audioManagedBean.selectSave()}" />
+							</p:selectBooleanButton>
+						</h:panelGrid>
+						
+						<p:fieldset   rendered="#{audioManagedBean.disabled}" toggleable="true"  legend="Notificación" style="margin-bottom:20px">
+					        <h:panelGrid columns="2" cellpadding="5">
+					            <p:graphicImage  value="./../resources/image/ui_icon/warning.png" height="50" />
+					            <h:outputText value="#{audioManagedBean.emptyMessage}" />
+					        </h:panelGrid>
+					    </p:fieldset>
+					</div>
+					
+					<div class="ui-g">
+				   		<p:dataTable id="id_audio_table" var="audio" value="#{audioManagedBean.listAudio}"
+							paginatorTemplate="{RowsPerPageDropdown} {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} "
+							paginator="true" rows="15" rowsPerPageTemplate="10, 15, 20" style="font-size:80%;" emptyMessage="#{audioManagedBean.emptyMessage}">
+				
+							<f:facet name="header">
+								Listado de grabaciones de audio mediante el dispositivo seleccionado 
+								<p:commandButton id="id_toggler" type="button" value="Columnas" style="float:right; height:30px;" icon="ui-icon-calculator" />
+        						<p:columnToggler datasource="id_audio_table" trigger="id_toggler" />       
+							</f:facet>
+							
+							<p:column headerText="ID" width="20">
+								<h:outputText value="#{audio.id}" />
+							</p:column>
+						
+							<p:column headerText="Nombre fichero" width="140">
+								<h:outputText value="#{audio.name}" />
+							</p:column>
+							
+							<p:column headerText="Descargar" width="105">
+				 				<p:commandButton value="Descargar audio"  ajax="false" icon="ui-icon-arrowthick-1-s">
+			        				<p:fileDownload value="#{audioManagedBean.getFileDownload(audio)}" />
+			    				</p:commandButton>
+			    			</p:column>
+			    				
+			    			<p:column headerText="Fecha de grabación" width="125">
+								<h:outputText value="#{audio.dateSynchronize}" >
+									<f:convertDateTime pattern="MM/dd/yyyy hh:mm a" />
+								</h:outputText>
+							</p:column>
+						
+							<p:column headerText="Reproductor" width="100%">
+								<audio controls="x" style="width:100%" >
+									<source src="#{audio.pathWeb}" type="audio/mp4" />
+								</audio>				
+							</p:column>
+							
+							<f:facet name="footer">
+        						Registros totales: #{fn:length(audioManagedBean.listAudio)}
+   						 	</f:facet>
+					
+						</p:dataTable>
+		    		 </div>
+		      
+		        	<div class="ui-g-12" align="right" style="margin-top:10px;">
+						<p:selectBooleanButton id="id_boton" styleClass="buttonPF" onLabel="Parar grabación" offLabel="Grabar audio" disabled="#{audioManagedBean.disabled || audioManagedBean.disabledDevice}" value="#{audioManagedBean.record}"  onIcon="ui-icon-stop" offIcon="ui-icon-bullet"  >	
+			       			<p:ajax  update=":id_form:id_growl,:id_form:id_tab:id_audio_table,:id_form:id_tab:id_delete" listener="#{audioManagedBean.record()}"  onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"/>
+			       		</p:selectBooleanButton>	
+			       		<p:commandButton id="id_delete"  value="Eliminar audios" action="#{audioManagedBean.deleteAllAudio()}" icon="ui-icon-cancel" disabled="#{audioManagedBean.listAudio.size() == 0 || audioManagedBean.disabled}" styleClass="buttonPF"  update=":id_form:id_growl,:id_form:id_tab:id_audio_table,:id_form:id_tab:id_delete" onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"/> 	
+					</div>
+		      		
+		      
+				</p:tab>
+			</p:tabView>
+			
+			 <pe:blockUI widgetVar="blockUIWidget">  
+			    <h:panelGrid columns="2">  
+			        <h:graphicImage  value="./../resources/image/ui_icon/load.gif" height="150" />  
+			        <h:outputText value="Sincronizando audio..." style="white-space: nowrap;"/>  
+			    </h:panelGrid>  
+			</pe:blockUI>
+    	</h:form>
+		
+	</ui:define>
+</ui:composition>

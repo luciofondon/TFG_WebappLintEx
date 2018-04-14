@@ -1,0 +1,33 @@
+/* 
+    Document   : 	estilo
+    Created on : 	29-ago-2013, 20:49:29
+    Author     : 	Lucio David Fondon Terron
+    Description:	Hoja de estilos para la plantilla.
+*/
+.buttonPF {
+	margin-top: 10px;
+	margin-left: 5px;
+}
+
+.schedulePF {
+	height: 400px;
+}
+
+.dataTablePF {
+	margin-bottom: 20px;
+	font-size: 80%;
+}
+
+.inputPF {
+	width: 300px;
+}
+
+.inputTextConfigurationPF {
+	width: 150px;
+}
+
+.scrollPanelPF {
+	height: 650px;
+	border: 0px;
+	background-color: transparent;
+}

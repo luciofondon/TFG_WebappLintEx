@@ -1,0 +1,17 @@
+.opciones {
+	width: 40%; /*Ancho div*/
+	background-color: red;
+	position: absolute;
+	height: 400px; /*altura div */
+	left: 0%;
+	
+}
+
+.visor {
+	background-color: blue;
+	width: 60%; /*Ancho div*/
+	position: absolute;
+	height: 100%; /*altura div */
+	left: 40%;
+	
+}

@@ -1,0 +1,136 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				template="../template/DefaultLayout.xhtml"
+				xmlns:pe="http://primefaces.org/ui/extensions"
+				>
+
+	
+	<ui:define name="contenido" >
+		<h:form>
+		
+		
+			    
+			<p:tabView id="id_tab" dynamic="true" cache="true">
+		        <p:tab title="Detalles del dispositivo">
+		        
+		        
+					<f:metadata>
+	    				<f:viewParam name="imei" value="#{deviceManagedBean.imei}" />
+					</f:metadata>
+					
+					
+					<p:accordionPanel>
+			        <p:tab title="Características comunes">
+			            <h:panelGrid columns="6" cellpadding="20">
+			             	<p:outputLabel for="id_imei" value="Código IMEI: " />
+				   		 	<p:inputText id="id_imei" disabled="true" value="#{deviceManagedBean.deviceView.imei}"  />
+				   		 	
+				   		 	<p:outputLabel for="id_ip" value="Dirección IP:" />
+				   		 	<p:inputText id="id_ip" disabled="true" value="#{deviceManagedBean.deviceView.ip}"  />
+				   		 	
+				   		 	<p:outputLabel for="id_phoneNumber" value="Número de teléfono: " />
+				   		 	<p:inputText id="id_phoneNumber" disabled="true" value="#{deviceManagedBean.deviceView.phoneNumber}"  />
+				   		 	
+			            	<p:outputLabel for="id_last_connection" value="Última conexión: " />
+				   		 	<p:inputText id="id_last_connection" disabled="true" value="#{deviceManagedBean.deviceView.lastConnection}"  >
+				   		 	    <f:convertDateTime pattern="MM/dd/yyyy hh:mm a" />
+				   		 	</p:inputText>
+				   		 	
+				   		 	<p:outputLabel for="id_last_synchronization" value="Última sincronización: " />
+				   		 	<p:inputText id="id_last_synchronization" disabled="true" value="#{deviceManagedBean.deviceView.lastSynchronization}"  >
+				   		 	    <f:convertDateTime pattern="MM/dd/yyyy hh:mm a" />
+				   		 	</p:inputText>
+				   		 	
+				   		 	<p:outputLabel for="id_battery" value="Nivel de batería: " />
+				   		 	<p:inputText id="id_battery" disabled="true" value="#{deviceManagedBean.deviceView.battery}%"  />
+				   		 	
+				   		 	<p:outputLabel for="id_modelo" value="Modelo:" />
+				   		 	<p:inputText id="id_modelo" disabled="true" value="#{deviceManagedBean.deviceView.model}"  />
+				   		 	
+				   		 	<p:outputLabel for="id_version" value="Versión de Android: " />
+				   		 	<p:inputText id="id_version" disabled="true" value="#{deviceManagedBean.deviceView.version}"  />
+				   		 	
+				   		 	<p:column colspan="1"/>
+							<p:column colspan="1"/>
+				   		 	
+				   		 	<p:outputLabel for="id_email" value="Email activados: " />
+				   		    <p:inputTextarea id="id_email" value="#{deviceManagedBean.deviceView.email}" disabled="true" cols="30" />
+				   		 
+			        	</h:panelGrid>
+			        </p:tab>
+			        <p:tab title="Conexiones">
+			            <h:panelGrid columns="6" cellpadding="20">
+			            	<p:outputLabel for="id_internet" value="Vía de conexión a Internet: " />
+				   		 	<p:inputText id="id_internet" disabled="true" value="#{deviceManagedBean.deviceView.connectionInternet}"  />
+				   		 	
+			            	<p:outputLabel for="id_power" value="Conexión a la corriente:" />
+				   		 	<p:inputText id="id_power" disabled="true" value="#{deviceManagedBean.deviceView.powerState}"  />
+				   		 	
+				   		 	<p:outputLabel for="id_bluetooth" value="Estado Bluetooth:" />
+				   		 	<p:inputText id="id_bluetooth" disabled="true" value="#{deviceManagedBean.deviceView.bluetoothState}"  />
+				   		 	
+				   		 	<p:outputLabel for="id_mobile" value="Datos móviles: " />
+				   		 	<p:inputText id="id_mobile" disabled="true" value="#{deviceManagedBean.deviceView.mobileState}"  />
+				   		 	
+				   		 	<p:outputLabel for="id_gps_state" value="Estado GPS:" />
+				   		 	<p:inputText id="id_gps_state" disabled="true" value="#{deviceManagedBean.deviceView.gpsState}"  />
+				   		 	
+				   		 	<p:outputLabel for="id_nfc" value="Estado NFC: " />
+				   		 	<p:inputText id="id_nfc" disabled="true" value="#{deviceManagedBean.deviceView.nfcState}"  />
+				   		 	
+				   		 	<p:outputLabel for="id_wifi" value="Estado Wi-Fi:" />
+				   		 	<p:inputText id="id_wifi" disabled="true" value="#{deviceManagedBean.deviceView.wifiState}"  />
+				   		 	
+							<p:outputLabel for="id_name_company" value="Operador de red:" />
+							<p:inputText id="id_name_company" disabled="true" value="#{deviceManagedBean.deviceView.nameCompany}"  />
+							
+							<p:column colspan="1"/>
+							<p:column colspan="1"/>
+						
+							<p:outputLabel for="id_call_state" value="Estado llamada:" />
+							<p:inputTextarea id="id_call_state" cols="30" disabled="true" value="#{deviceManagedBean.deviceView.callState}"  />
+							
+						</h:panelGrid>
+			        </p:tab>
+			        <p:tab title="Coordenadas" disabled="#{deviceManagedBean.disabledMap()}">
+			            <h:panelGrid columns="4" cellpadding="20">
+			            
+			            	<p:outputLabel for="id_address" value="Dirección:" />
+				   		 	<p:inputText id="id_address" styleClass="inputPF"  disabled="true"  value="#{deviceManagedBean.deviceView.address}"  />
+				   		 	
+				   		 	<p:outputLabel for="id_localidad" value="Localidad: " />
+				   		 	<p:inputText id="id_localidad" styleClass="inputPF"  disabled="true" value="#{deviceManagedBean.deviceView.locality}"  />
+				   		 	
+				   		 	<p:outputLabel for="id_country" value="País: " />
+				   		 	<p:inputText id="id_country" styleClass="inputPF"  disabled="true" value="#{deviceManagedBean.deviceView.country}"  />		
+				   		 	
+			            
+			            	<p:outputLabel for="id_gps" value="Coordenadas (GPS): " />
+				   		 	<p:inputText id="id_gps" styleClass="inputPF"  disabled="true" value="#{deviceManagedBean.deviceView.latitudeGps}, #{deviceManagedBean.deviceView.longitudeGps}"  />
+				   		 	
+				   		 	<p:outputLabel for="id_network" value="Coordenadas (Red móvil / Wi-Fi): " />
+				   		 	<p:inputText id="id_network" styleClass="inputPF"  disabled="true" value="#{deviceManagedBean.deviceView.latitudeNetwork}, #{deviceManagedBean.deviceView.longitudeNetwork} "  />
+				   		 	
+				   		 	<p:outputLabel for="id_passive" value="Coordenadas (Pasivo): " />
+				   		 	<p:inputText id="id_passive" styleClass="inputPF" disabled="true" value="#{deviceManagedBean.deviceView.latitudePassive}, #{deviceManagedBean.deviceView.longitudePassive} "  />
+				   		 	
+				   		 </h:panelGrid>
+				   		 
+				   		 <p:gmap  center="#{deviceManagedBean.centerGmap.lat},#{deviceManagedBean.centerGmap.lng}" zoom="20" type="HYBRID"  model="#{deviceManagedBean.markerGmap}" style="width:100%;height:400px" />
+				   		 
+				   	</p:tab>
+			</p:accordionPanel>
+		
+		
+		</p:tab>
+		</p:tabView>
+		</h:form>
+	
+	</ui:define>
+	
+</ui:composition>

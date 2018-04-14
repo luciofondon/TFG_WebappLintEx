@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				template="../template/DefaultLayout.xhtml"
+				xmlns:pe="http://primefaces.org/ui/extensions"
+				xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+				>
+
+	<ui:define name="contenido" >
+		<h:form id="id_form">
+			<p:growl id="id_growl" showDetail="true" life="4000"  />
+		
+       		<p:tabView id="id_tab" dynamic="true" cache="true">
+				<p:tab   title="Historial de contactos">
+       
+                 	<div class="ui-g-12"  >
+                 	
+                 	  	<p:fieldset  rendered="#{contactManagedBean.disabled}" legend="Notificación" style="margin-bottom:20px">
+					        <h:panelGrid columns="2" cellpadding="5">
+					            <p:graphicImage  value="./../resources/image/ui_icon/warning.png" height="50" />
+					            <h:outputText value="#{contactManagedBean.emptyMessage}" />
+					        </h:panelGrid>
+					    </p:fieldset>
+					    
+						<p:dataTable id="id_contact_table" var="contact" value="#{contactManagedBean.listContact}" 
+							paginatorTemplate="{RowsPerPageDropdown} {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+							paginator="true"  rowsPerPageTemplate="25, 30, 35"  rows="30" style="font-size:80%;" emptyMessage="#{contactManagedBean.emptyMessage}" 
+							filteredValue="#{contactManagedBean.listFilteredContact}">
+							
+			    
+			 				<f:facet name="header">
+								Listado de contactos del dispositivo seleccionado 
+								<p:commandButton id="id_toggler" type="button" value="Columnas" style="float:right; height:30px;" icon="ui-icon-calculator" />
+        						<p:columnToggler datasource="id_contact_table" trigger="id_toggler" />      
+							</f:facet>
+						
+							<p:column headerText="ID" width="20" >
+								<h:outputText value="#{contact.id}" />
+							</p:column>
+							
+							<p:column headerText="Nombre" width="140" filterBy="#{contact.name}" filterMatchMode="contains">
+								<h:outputText value="#{contact.name}" />
+							</p:column>
+			
+							<p:column headerText="Números de teléfonos" width="50%"  filterBy="#{contact.phoneNumber}" filterMatchMode="contains">
+								<h:outputText value="#{contact.phoneNumber}" />
+							</p:column>
+			
+							<p:column headerText="Emails" width="50%" filterBy="#{contact.email}" filterMatchMode="contains" >
+								<h:outputText value="#{contact.email}" />
+							</p:column>
+							
+							<f:facet name="footer">
+        						Registros totales: #{fn:length(contactManagedBean.listContact)}
+   						 	</f:facet>
+						</p:dataTable>
+					</div>
+					
+  
+       		   		<div class="ui-g-12" align="right" >
+		       			<p:commandButton value="Sincronizar" styleClass="buttonPF" action="#{contactManagedBean.synchronizeLogContact()}" update=":id_form:id_growl,:id_form:id_tab:id_contact_table,:id_form:id_tab:id_delete,:id_form:id_tab:id_menu_exportar" icon="fa fa-refresh" disabled="#{contactManagedBean.disabled || contactManagedBean.disabledDevice}"  onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"/> 
+						<p:commandButton id="id_delete" value="Eliminar contactos" action="#{contactManagedBean.deleteAllContact()}" icon="ui-icon-cancel" disabled="#{contactManagedBean.listContact.size() == 0 || contactManagedBean.disabled}" styleClass="buttonPF"  update=":id_form:id_growl,:id_form:id_tab:id_contact_table,:id_form:id_tab:id_delete,:id_form:id_tab:id_menu_exportar" onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"/> 	
+						<p:commandButton id="id_menu_exportar" styleClass="buttonPF"  value="Exportar" type="button" icon="fa fa-download" ajax="false" disabled="#{contactManagedBean.listContact.size() == 0 || contactManagedBean.disabled}" />
+					    <p:menu overlay="true" trigger="id_menu_exportar" my="left top" at="left bottom" style="font-size:60%">
+					        <p:menuitem value="PDF" ajax="false">
+					          	<p:dataExporter type="pdf" target="id_contact_table" fileName="Contactos" />
+					       	</p:menuitem>
+					        <p:menuitem value="XML" ajax="false" >
+					        	<p:dataExporter type="xml" target="id_contact_table" fileName="Contactos" />
+					        </p:menuitem>
+					       	<p:menuitem value="CSV"   ajax="false">
+					        	<p:dataExporter type="csv" target="id_contact_table" fileName="Contactos" />
+					    	</p:menuitem>
+					    </p:menu>
+					</div>
+
+    			</p:tab>
+    		</p:tabView>
+    		
+ 	    	<pe:blockUI widgetVar="blockUIWidget">  
+			    <h:panelGrid columns="2">  
+			        <h:graphicImage  value="./../resources/image/ui_icon/load.gif" height="150" />  
+			        <h:outputText value="Sincronizando contactos..." style="white-space: nowrap;"/>  
+			    </h:panelGrid>  
+			</pe:blockUI>
+    	</h:form>
+		
+	</ui:define>
+</ui:composition>

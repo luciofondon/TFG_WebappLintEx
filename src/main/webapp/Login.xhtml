@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:pe="http://primefaces.org/ui/extensions"
+				>
+
+	<h:head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link href="./resources/css/login.css" rel="stylesheet" type="text/css" />
+		<title>Pagina de bienvenida</title>
+		<link rel="shortcut icon" href="./resources/image/ui_icon/uex.ico" />
+	</h:head>
+
+	<h:body>
+	
+	<script type="text/javascript">
+		  //<![CDATA[
+		  function manejarLogin(xhr, status, args) {
+		    if (!args.validationFailed && args.estaLogeado) {
+		      setTimeout(function() {
+		        window.location = args.view;
+		      }, 500);
+		    }
+		  }
+		//]]>
+	</script>
+	
+		<div class="left">
+			<h:graphicImage styleClass="logoUnex" value="./resources/image/logo/logo_uex.png" />
+		</div>
+		
+		<div class="right">
+			<h:form id="id_form" >
+				<p:growl id="id_growl" showDetail="true" life="2000" />
+				<div class="ui-g-12">
+					<h:panelGrid id="panel" columns="2" cellpadding="5">
+	      				<p:outputLabel for="id_nick" value="Usuario: *" />
+	       				<p:inputText id="id_nick" style="width:225px;"  value="#{loginManagedBean.nick}" />
+	
+	       				<p:outputLabel for="id_password" value="Contraseña: *" />
+	      				<p:password id="id_password" style="width:225px;" value="#{loginManagedBean.password}"/>
+	   					<p:column colspan="1"/>
+		   				<p:columnGroup>
+		   					<p:commandButton id="id_loginButton" value="Entrar" icon="ui-icon-power"  actionListener="#{loginManagedBean.doLogin()}" update=":id_form:id_growl"  oncomplete="manejarLogin(xhr, status, args)" />
+		   					<p:commandButton id="id_loginReset" icon=" ui-icon-trash" update=":id_form:id_nick,:id_form:id_password" value="Limpiar"  actionListener="#{loginManagedBean.reset()}"/>
+		       			</p:columnGroup>
+	       			</h:panelGrid>
+	       		</div>
+			</h:form>					
+		</div>
+	
+	</h:body>
+
+</html>

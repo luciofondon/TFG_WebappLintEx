@@ -1,0 +1,164 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				template="../template/DefaultLayout.xhtml"
+				xmlns:pe="http://primefaces.org/ui/extensions"
+				xmlns:lang="es" lang="es"
+				xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+				>
+				
+				
+
+	<ui:define name="contenido">
+		<h:form id="id_form">   
+		    <p:growl id="id_growl" showDetail="true"  life="5000"/>
+	
+			<p:tabView id="id_tab" dynamic="true" cache="true">
+		        
+		        <!-- Incio: Pestania de directorios de Android -->
+		        <p:tab title="Listado de directorios">
+		        	<div class="ui-g">
+		   			  	<h:panelGrid columns="6" cellpadding="10">
+		        			<p:outputLabel  value="Fichero seleccionado: "  />
+		        			<p:inputText id="id_syncronize_file" value="#{resourceManagedBean.resourceSelected.name}" disabled="true" style="width:400px;"/>
+		        			<p:commandButton id="id_sincronize" value="Sincronizar fichero" icon="fa fa-download"  action="#{resourceManagedBean.download()}" update=":id_form:id_growl"  disabled="#{resourceManagedBean.resourceSelected==null || resourceManagedBean.disabled}" onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()" /> 						            
+		        		</h:panelGrid>
+		        		
+	        			<p:fieldset   rendered="#{resourceManagedBean.disabled}" toggleable="true"  legend="Notificación" style="margin-bottom:20px">
+					        <h:panelGrid columns="2" cellpadding="5">
+					            <p:graphicImage  value="./../resources/image/ui_icon/warning.png" height="50" />
+					            <h:outputText value="#{resourceManagedBean.emptyMessage}" />
+					        </h:panelGrid>
+					    </p:fieldset>
+		        	</div>
+					       
+		        	<div class="ui-g-12">
+			       		<p:dataTable id="id_resource_android_table" var="res" value="#{resourceManagedBean.listResourceAndroid}"
+							paginatorTemplate="{RowsPerPageDropdown} {CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} "
+							paginator="true" rows="20" rowsPerPageTemplate="15, 20, 25"   style="font-size:80%;" emptyMessage="#{resourceManagedBean.emptyMessage}"
+							filteredValue="#{resourceManagedBean.listFilteredAndroid}">
+				
+							<f:facet name="header">
+								Listado de paths Android del dispositivo seleccionado
+								<p:commandButton id="id_toggler" type="button" value="Columnas" style="float:right; height:30px;" icon="ui-icon-calculator" />
+        						<p:columnToggler datasource="id_resource_android_table" trigger="id_toggler" /> 	 
+							</f:facet>
+						
+							<p:column headerText="Seleccionar" width="45" style="text-align: center">
+					           	<p:commandButton  icon="ui-icon-plusthick" title="Seleccionar" update=":id_form:id_growl,:id_form:id_tab:id_syncronize_file,:id_form:id_tab:id_sincronize" action="#{resourceManagedBean.selected()}">
+               						<f:setPropertyActionListener value="#{res}" target="#{resourceManagedBean.resourceSelected}" />
+					            </p:commandButton>
+        					</p:column>
+        					
+        					<p:column headerText="ID" width="40" >
+								<h:outputText value="#{res.id}" />
+							</p:column>
+							
+							<p:column headerText="Nombre" width="200" filterBy="#{res.name}" filterMatchMode="contains">
+								<h:outputText value="#{res.name}" />
+							</p:column>
+							
+							<p:column headerText="Tamaño" width="50">
+								<h:outputText value="#{res.size} KB" />
+							</p:column>
+							
+							<p:column headerText="Ruta Android" width="100%" filterBy="#{res.pathAndroid}" filterMatchMode="contains">
+								<h:outputText value="#{res.pathAndroid}" />
+							</p:column>
+							
+							<f:facet name="footer">
+        						Registros totales: #{fn:length(contactManagedBean.listContact)}
+   						 	</f:facet>
+						</p:dataTable>
+					</div>
+					
+		        	<div class="ui-g-12" align="right" style="margin-top:10px;">
+       	 				<p:commandButton value="Sincronizar directorios" action="#{resourceManagedBean.synchronize()}" update=":id_form:id_growl,:id_form:id_tab:id_detele_android,:id_form:id_tab:id_resource_android_table"  icon="fa fa-refresh" styleClass="buttonPF"  onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()" disabled="#{resourceManagedBean.disabled || resourceManagedBean.disabledDevice}"/> 
+			    		<p:commandButton id="id_detele_android" value="Eliminar directorios" action="#{resourceManagedBean.deleteAllResourceAndroid()}" icon="ui-icon-cancel" disabled="#{resourceManagedBean.listResourceAndroid.size() == 0 ||  resourceManagedBean.disabled}" styleClass="buttonPF"  update=":id_form:id_growl,:id_form:id_tab:id_detele_android,:id_form:id_tab:id_resource_android_table" onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"/> 	
+			    	</div>
+		        
+		        </p:tab>
+		        <!-- Fin: Pestania de directorios de Android -->
+		        
+		        <!-- Inicio: Pestania de recursos sincrinizados -->
+		        <p:tab title="Recursos sincronizados">
+		        	<p:fieldset   rendered="#{resourceManagedBean.disabled}" toggleable="true"  legend="Notificación" style="margin-bottom:20px">
+				        <h:panelGrid columns="2" cellpadding="5">
+				            <p:graphicImage  value="./../resources/image/ui_icon/warning.png" height="50" />
+				            <h:outputText value="#{resourceManagedBean.emptyMessage}" />
+				        </h:panelGrid>
+				    </p:fieldset>
+				    
+		        	<p:idleMonitor timeout="3000">
+						<p:ajax event="idle" update=":id_form:id_tab:id_resource_web_table" />
+					</p:idleMonitor>
+					<div class="ui-g-12"  >
+		          		<p:dataTable id="id_resource_web_table" var="res" value="#{resourceManagedBean.listResourceWeb}"
+							paginatorTemplate="{RowsPerPageDropdown} {CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} "
+							paginator="true" rows="20" rowsPerPageTemplate="15, 20, 25" style="font-size:80%;" emptyMessage="#{resourceManagedBean.emptyMessage}">
+				
+							<f:facet name="header">
+								Listado de ficheros sincronizados del dispositivo seleccionado
+								<p:commandButton id="id_toggler" type="button" value="Columnas" style="float:right; height:30px;" icon="ui-icon-calculator" />
+	        					<p:columnToggler datasource="id_resource_web_table" trigger="id_toggler" /> 
+							</f:facet>
+							
+							<p:column headerText="ID" width="20" >
+								<h:outputText value="#{res.id}" />
+							</p:column>
+						
+							<p:column headerText="Nombre del fichero" width="180" filterBy="#{res.name}" filterMatchMode="contains">
+								<h:outputText value="#{res.name}" />
+							</p:column>
+							
+							<p:column  headerText="Fecha de sincronización" width="120">
+								<h:outputText value="#{res.dateSynchronize}" >
+									<f:convertDateTime pattern="MM/dd/yyyy hh:mm a" />
+								</h:outputText>
+							</p:column>
+							
+							<p:column  headerText="Tamaño" width="40">
+								<h:outputText value="#{res.size} KB" />
+							</p:column>
+							
+							<p:column headerText="Path Android" width="100%" filterBy="#{res.pathAndroid}" filterMatchMode="contains">
+								<h:outputText value="#{res.pathAndroid}" />
+							</p:column>
+							
+							<p:column headerText="Descargar" width="110">
+					 			<p:commandButton value="Descargar fichero"  ajax="false" icon="ui-icon-arrowthick-1-s">
+				        			<p:fileDownload value="#{resourceManagedBean.getFileDownload(res)}" />
+				    			</p:commandButton>
+			    			</p:column>
+			    			
+			    			<f:facet name="footer">
+        						Registros totales: #{fn:length(resourceManagedBean.listResourceWeb)}
+   						 	</f:facet>
+						</p:dataTable>
+					</div>
+					<div class="ui-g-12" align="right" >
+						<p:commandButton id="id_detele_web" value="Eliminar ficheros" action="#{resourceManagedBean.deleteAllResourceWeb()}" icon="ui-icon-cancel" disabled="#{resourceManagedBean.listResourceWeb.size() == 0 || resourceManagedBean.disabled}" styleClass="buttonPF"  update=":id_form:id_growl,:id_form:id_tab:id_detele_web" onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"/> 	
+					</div>
+	        
+		        </p:tab>
+		        <!-- Fin: Pestania de recursos sincrinizados -->
+		        
+			</p:tabView>
+			
+			
+			<pe:blockUI widgetVar="blockUIWidget">  
+			    <h:panelGrid columns="2">  
+			        <h:graphicImage  value="./../resources/image/ui_icon/load.gif" height="150" />  
+			        <h:outputText value="Sincronizando recursos..." style="white-space: nowrap;"/>  
+			    </h:panelGrid>  
+			</pe:blockUI>
+			
+			
+    	</h:form>
+	
+	</ui:define>
+</ui:composition>
